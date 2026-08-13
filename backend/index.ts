@@ -6,6 +6,15 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import pool from "./db";
 
+// Route imports
+import taskRoutes from "./routes/task.routes";
+import userRoutes from "./routes/user.routes";
+import commentRoutes from "./routes/comment.routes";
+import dashboardRoutes from "./routes/dashboard.routes";
+
+// Middleware imports
+import { errorHandler } from "./middleware/errorHandler";
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -16,8 +25,9 @@ app.use(
   })
 );
 
+// Health-check routes
 app.get("/", (req: Request, res: Response) => {
-  res.send("Task received successfully");
+  res.send("Task Management API is running");
 });
 
 app.get("/connect", async (req: Request, res: Response) => {
@@ -40,12 +50,14 @@ app.get("/connect", async (req: Request, res: Response) => {
   }
 });
 
-app.post("/", (req: Request, res: Response) => {
-  const task = req.body.task;
+// API routes
+app.use("/api", taskRoutes);
+app.use("/api", userRoutes);
+app.use("/api", commentRoutes);
+app.use("/api", dashboardRoutes);
 
-  console.log(task);
-  res.json({ message: "Task received successfully", task });
-});
+// Global error handler (must be after routes)
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
