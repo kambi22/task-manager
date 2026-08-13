@@ -29,8 +29,8 @@ export class TaskService {
 
     const totalCount = await taskRepository.count(where);
 
-    const page = query.page;
-    const limit = query.limit;
+    const page = Number(query.page) || 1;
+    const limit = Number(query.limit) || 20;
     const skip = (page - 1) * limit;
 
     const tasks = await taskRepository.findMany(

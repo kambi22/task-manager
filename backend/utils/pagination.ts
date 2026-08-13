@@ -8,6 +8,7 @@ export interface PaginationMeta {
   page: number;
   limit: number;
   totalCount: number;
+  total: number;
   totalPages: number;
   hasNextPage: boolean;
   hasPrevPage: boolean;
@@ -43,6 +44,7 @@ export function buildPaginationMeta(
     page: params.page,
     limit: params.limit,
     totalCount,
+    total: totalCount,
     totalPages,
     hasNextPage: params.page < totalPages,
     hasPrevPage: params.page > 1,

@@ -17,8 +17,13 @@ export function validate(schema: ZodSchema, target: ValidationTarget = "body") {
       return;
     }
 
-    // Replace with parsed/coerced values
-    (req as any)[target] = result.data;
+    // Replace with parsed/coerced values (supports Express 5 getters like req.query)
+    Object.defineProperty(req, target, {
+      value: result.data,
+      writable: true,
+      configurable: true,
+      enumerable: true,
+    });
     next();
   };
 }
