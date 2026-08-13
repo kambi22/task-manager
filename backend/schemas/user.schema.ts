@@ -7,11 +7,12 @@ const roles = ["USER", "ADMIN"] as const;
  */
 export const createUserSchema = z.object({
   name: z
-    .string({ required_error: "Name is required" })
-    .min(1, "Name cannot be empty")
+    .string()
+    .min(1, "Name is required")
     .max(100, "Name must be 100 characters or fewer"),
   email: z
-    .string({ required_error: "Email is required" })
+    .string()
+    .min(1, "Email is required")
     .email("Invalid email address"),
   role: z.enum(roles).optional().default("USER"),
 });

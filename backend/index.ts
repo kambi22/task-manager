@@ -4,7 +4,7 @@ dotenv.config({ path: path.resolve(__dirname, ".env") });
 
 import express, { Request, Response } from "express";
 import cors from "cors";
-import pool from "./db";
+import pool from "./config/db";
 
 // Route imports
 import taskRoutes from "./routes/task.routes";

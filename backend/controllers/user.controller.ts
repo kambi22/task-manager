@@ -1,11 +1,10 @@
 import { Request, Response, NextFunction } from "express";
-import prisma from "../prisma";
-import ApiError from "../utils/ApiError";
-import type { CreateUserInput } from "../validators/user.validator";
+import { userService } from "../services/user.service";
+import type { CreateUserInput } from "../schemas/user.schema";
 
 /**
  * GET /api/users
- * List all users (for assignee dropdowns, etc.).
+ * List all users.
  */
 export async function getUsers(
   req: Request,
@@ -13,17 +12,7 @@ export async function getUsers(
   next: NextFunction
 ): Promise<void> {
   try {
-    const users = await prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        role: true,
-        createdAt: true,
-      },
-      orderBy: { name: "asc" },
-    });
-
+    const users = await userService.getAllUsers();
     res.json({
       success: true,
       data: users,
@@ -44,23 +33,7 @@ export async function createUser(
 ): Promise<void> {
   try {
     const data = req.body as CreateUserInput;
-
-    // Check for duplicate email
-    const existingUser = await prisma.user.findUnique({
-      where: { email: data.email },
-    });
-    if (existingUser) {
-      throw ApiError.conflict("A user with this email already exists");
-    }
-
-    const user = await prisma.user.create({
-      data: {
-        name: data.name,
-        email: data.email,
-        role: data.role,
-      },
-    });
-
+    const user = await userService.createUser(data);
     res.status(201).json({
       success: true,
       data: user,

@@ -12,8 +12,9 @@ export function errorHandler(
 
   // Handle Zod validation errors
   if (err instanceof ZodError) {
-    const errors = err.errors.map(
-      (e) => `${e.path.join(".")}: ${e.message}`
+    const issues = err.issues || (err as any).errors || [];
+    const errors = issues.map(
+      (e: any) => `${Array.isArray(e.path) ? e.path.join(".") : e.path}: ${e.message}`
     );
     res.status(400).json({
       success: false,

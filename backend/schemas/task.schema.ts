@@ -17,8 +17,8 @@ const sortableFields = [
  */
 export const createTaskSchema = z.object({
   title: z
-    .string({ required_error: "Title is required" })
-    .min(1, "Title cannot be empty")
+    .string()
+    .min(1, "Title is required")
     .max(255, "Title must be 255 characters or fewer"),
   description: z.string().max(5000).optional().nullable(),
   status: z.enum(taskStatuses).optional().default("Pending"),

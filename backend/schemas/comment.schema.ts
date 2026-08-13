@@ -5,11 +5,12 @@ import { z } from "zod";
  */
 export const createCommentSchema = z.object({
   comment: z
-    .string({ required_error: "Comment is required" })
-    .min(1, "Comment cannot be empty")
+    .string()
+    .min(1, "Comment is required")
     .max(2000, "Comment must be 2000 characters or fewer"),
   userId: z
-    .string({ required_error: "User ID is required" })
+    .string()
+    .min(1, "User ID is required")
     .uuid("Invalid user ID"),
 });
 

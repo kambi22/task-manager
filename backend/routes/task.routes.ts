@@ -11,7 +11,7 @@ import {
   createTaskSchema,
   updateTaskSchema,
   taskQuerySchema,
-} from "../validators/task.validator";
+} from "../schemas/task.schema";
 
 const router = Router();
 
