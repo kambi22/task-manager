@@ -9,6 +9,7 @@ import { Modal } from "../components/ui/Modal";
 import { Globe, Building2, Download, RefreshCw, Layers, Search, CheckSquare, Mail } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../contexts/AuthContext";
+import { Tooltip } from "../components/ui/Tooltip";
 
 export default function TeamPage() {
   const { user: currentUser } = useAuth();
@@ -120,7 +121,22 @@ export default function TeamPage() {
                 Add Member
               </Button>
             </div>
-          ) : undefined
+          ) : (
+            <div className="flex items-center gap-3">
+              <Tooltip content="Only admin can access external directories">
+                <Button variant="secondary" disabled>
+                  <Globe size={16} />
+                  Explore External Directory (Locked)
+                </Button>
+              </Tooltip>
+              <Tooltip content="Only admin can add members to team">
+                <Button disabled>
+                  <CheckSquare size={16} />
+                  Add Member (Locked)
+                </Button>
+              </Tooltip>
+            </div>
+          )
         }
       />
 

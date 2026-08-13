@@ -4,6 +4,7 @@ import type { Task } from "../../types";
 import { StatusBadge, PriorityBadge } from "../ui/Badge";
 import { Avatar } from "../ui/Avatar";
 import { formatDate } from "../../utils/formatDate";
+import { Tooltip } from "../ui/Tooltip";
 
 interface TaskRowProps {
   task: Task;
@@ -71,7 +72,7 @@ export function TaskRow({ task, onEdit, onDelete, onView, currentUser }: TaskRow
       {/* Actions */}
       <td className="px-4 py-4 whitespace-nowrap">
         <div className="flex items-center gap-2">
-          {canEdit && (
+          {canEdit ? (
             <button
               onClick={(e) => {
                 e.stopPropagation();
@@ -82,6 +83,16 @@ export function TaskRow({ task, onEdit, onDelete, onView, currentUser }: TaskRow
             >
               <Pencil size={14} />
             </button>
+          ) : (
+            <Tooltip content="Only admins or assignees can edit this task">
+              <button
+                onClick={(e) => e.stopPropagation()}
+                className="p-2 rounded-full border border-white/5 bg-slate-900/30 text-slate-600 cursor-not-allowed opacity-50 shadow-sm"
+                title="Edit task (Locked)"
+              >
+                <Pencil size={14} />
+              </button>
+            </Tooltip>
           )}
 
           <div className="relative">
@@ -105,7 +116,7 @@ export function TaskRow({ task, onEdit, onDelete, onView, currentUser }: TaskRow
                     setShowMenu(false);
                   }}
                 />
-                <div className="absolute right-0 top-10 z-20 w-44 bg-slate-900/90 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl overflow-hidden animate-fade-in py-1">
+                <div className="absolute right-0 top-10 z-20 w-48 bg-slate-900/90 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl overflow-hidden animate-fade-in py-1">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -117,7 +128,7 @@ export function TaskRow({ task, onEdit, onDelete, onView, currentUser }: TaskRow
                     <Eye size={15} className="text-blue-400" />
                     View Details
                   </button>
-                  {isAdmin && (
+                  {isAdmin ? (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -129,6 +140,17 @@ export function TaskRow({ task, onEdit, onDelete, onView, currentUser }: TaskRow
                       <Trash2 size={15} />
                       Delete Task
                     </button>
+                  ) : (
+                    <Tooltip content="Only admin can delete tasks">
+                      <button
+                        onClick={(e) => e.stopPropagation()}
+                        className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-medium text-slate-600 cursor-not-allowed opacity-50"
+                        disabled
+                      >
+                        <Trash2 size={15} />
+                        Delete Task (Locked)
+                      </button>
+                    </Tooltip>
                   )}
                 </div>
               </>

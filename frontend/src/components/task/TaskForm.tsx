@@ -4,6 +4,7 @@ import { Modal } from "../ui/Modal";
 import { Input, Textarea } from "../ui/Input";
 import { Select } from "../ui/Select";
 import { Button } from "../ui/Button";
+import { Tooltip } from "../ui/Tooltip";
 import { STATUS_OPTIONS, PRIORITY_OPTIONS, STATUS_CONFIG, PRIORITY_CONFIG } from "../../utils/constants";
 
 interface TaskFormProps {
@@ -117,28 +118,32 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users, currentUser }
       size="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Input
-          label="Title"
-          placeholder="Enter task title"
-          value={formData.title}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, title: e.target.value }))
-          }
-          error={errors.title}
-          autoFocus
-          disabled={disableNonStatusFields}
-        />
+        <Tooltip content="Only admin can access; user can't access" disabled={!disableNonStatusFields}>
+          <Input
+            label="Title"
+            placeholder="Enter task title"
+            value={formData.title}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, title: e.target.value }))
+            }
+            error={errors.title}
+            autoFocus
+            disabled={disableNonStatusFields}
+          />
+        </Tooltip>
 
-        <Textarea
-          label="Description"
-          placeholder="Add a description (optional)"
-          value={formData.description}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, description: e.target.value }))
-          }
-          error={errors.description}
-          disabled={disableNonStatusFields}
-        />
+        <Tooltip content="Only admin can access; user can't access" disabled={!disableNonStatusFields}>
+          <Textarea
+            label="Description"
+            placeholder="Add a description (optional)"
+            value={formData.description}
+            onChange={(e) =>
+              setFormData((prev) => ({ ...prev, description: e.target.value }))
+            }
+            error={errors.description}
+            disabled={disableNonStatusFields}
+          />
+        </Tooltip>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <Select
@@ -153,41 +158,47 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users, currentUser }
             }
           />
 
-          <Select
-            label="Priority"
-            options={priorityOptions}
-            value={formData.priority}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                priority: e.target.value as TaskPriority,
-              }))
-            }
-            disabled={disableNonStatusFields}
-          />
+          <Tooltip content="Only admin can access; user can't access" disabled={!disableNonStatusFields}>
+            <Select
+              label="Priority"
+              options={priorityOptions}
+              value={formData.priority}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  priority: e.target.value as TaskPriority,
+                }))
+              }
+              disabled={disableNonStatusFields}
+            />
+          </Tooltip>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <Select
-            label="Assignee"
-            options={userOptions}
-            placeholder="Unassigned"
-            value={formData.assignedTo}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, assignedTo: e.target.value }))
-            }
-            disabled={disableNonStatusFields}
-          />
+          <Tooltip content="Only admin can access; user can't access" disabled={!disableNonStatusFields}>
+            <Select
+              label="Assignee"
+              options={userOptions}
+              placeholder="Unassigned"
+              value={formData.assignedTo}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, assignedTo: e.target.value }))
+              }
+              disabled={disableNonStatusFields}
+            />
+          </Tooltip>
 
-          <Input
-            label="Due Date"
-            type="datetime-local"
-            value={formData.dueDate}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, dueDate: e.target.value }))
-            }
-            disabled={disableNonStatusFields}
-          />
+          <Tooltip content="Only admin can access; user can't access" disabled={!disableNonStatusFields}>
+            <Input
+              label="Due Date"
+              type="datetime-local"
+              value={formData.dueDate}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, dueDate: e.target.value }))
+              }
+              disabled={disableNonStatusFields}
+            />
+          </Tooltip>
         </div>
 
         {/* Actions */}
