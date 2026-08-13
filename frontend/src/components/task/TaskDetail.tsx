@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { X, Calendar, User as UserIcon, Flag, Clock } from "lucide-react";
-import type { Task, User } from "../../types";
+import type { Task } from "../../types";
 import { getTaskById } from "../../api/taskApi";
 import { StatusBadge, PriorityBadge } from "../ui/Badge";
 import { Avatar } from "../ui/Avatar";
@@ -11,10 +11,9 @@ import { formatDate } from "../../utils/formatDate";
 interface TaskDetailProps {
   taskId: string | null;
   onClose: () => void;
-  users: User[];
 }
 
-export function TaskDetail({ taskId, onClose, users }: TaskDetailProps) {
+export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
   const [task, setTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -181,7 +180,7 @@ export function TaskDetail({ taskId, onClose, users }: TaskDetailProps) {
               <div className="border-t border-slate-800/50" />
 
               {/* Comments */}
-              <CommentSection taskId={task.id} users={users} />
+              <CommentSection taskId={task.id} />
             </>
           )}
         </div>

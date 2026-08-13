@@ -30,7 +30,14 @@ export default function App() {
             <Route path="/" element={<DashboardPage />} />
             <Route path="/tasks" element={<TasksPage />} />
             <Route path="/team" element={<TeamPage />} />
-            <Route path="/users" element={<UsersPage />} />
+            <Route
+              path="/users"
+              element={
+                <ProtectedRoute allowedRoles={["ADMIN"]}>
+                  <UsersPage />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Placeholder routes for sidebar nav items */}
             <Route

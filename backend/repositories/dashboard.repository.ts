@@ -1,7 +1,7 @@
 import prisma from "../config/prisma";
 
 export class DashboardRepository {
-  async getDashboardData() {
+  async getDashboardData(userId?: string) {
     return Promise.all([
       // Total tasks
       prisma.task.count(),
@@ -39,6 +39,13 @@ export class DashboardRepository {
 
       // Total users
       prisma.user.count(),
+
+      // Tasks assigned to current user
+      userId
+        ? prisma.task.count({
+            where: { assignedTo: userId },
+          })
+        : Promise.resolve(0),
     ]);
   }
 }

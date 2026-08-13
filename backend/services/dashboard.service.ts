@@ -1,7 +1,7 @@
 import { dashboardRepository } from "../repositories/dashboard.repository";
 
 export class DashboardService {
-  async getDashboardStats() {
+  async getDashboardStats(userId?: string) {
     const [
       totalTasks,
       statusCounts,
@@ -9,7 +9,8 @@ export class DashboardService {
       overdueCount,
       recentTasks,
       totalUsers,
-    ] = await dashboardRepository.getDashboardData();
+      myTasksCount,
+    ] = await dashboardRepository.getDashboardData(userId);
 
     const byStatus: Record<string, number> = {
       Pending: 0,
@@ -35,6 +36,7 @@ export class DashboardService {
       totalTasks,
       totalUsers,
       overdueCount,
+      myTasksCount,
       byStatus,
       byPriority,
       recentTasks,

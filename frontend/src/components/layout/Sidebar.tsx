@@ -32,6 +32,13 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
     navigate("/login", { replace: true });
   };
 
+  const filteredNavItems = navItems.filter((item) => {
+    if (item.path === "/users") {
+      return user?.role === "ADMIN";
+    }
+    return true;
+  });
+
   return (
     <>
       {/* Mobile Backdrop Overlay */}
@@ -75,7 +82,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
 
         {/* Navigation */}
         <nav className="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto">
-          {navItems.map((item) => (
+          {filteredNavItems.map((item) => (
             <NavLink
               key={item.path}
               to={item.path}

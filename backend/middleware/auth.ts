@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verifyToken, type JwtPayload } from "../config/jwt";
 import ApiError from "../utils/ApiError";
+import type { Role } from "../models/user.model";
 
 /**
  * Authentication middleware.
@@ -29,3 +30,25 @@ export function authenticate(
     next(ApiError.unauthorized("Invalid or expired token"));
   }
 }
+
+/**
+ * Role-based authorization middleware.
+ * Checks if the authenticated user's role matches any of the required roles.
+ */
+export function authorize(allowedRoles: Role[]) {
+  return (req: Request, _res: Response, next: NextFunction): void => {
+    const user = (req as any).user;
+    if (!user) {
+      next(ApiError.unauthorized("Authentication required"));
+      return;
+    }
+
+    if (!allowedRoles.includes(user.role)) {
+      next(ApiError.forbidden("Access denied: insufficient permissions"));
+      return;
+    }
+
+    next();
+  };
+}
+

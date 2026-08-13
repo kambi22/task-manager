@@ -85,7 +85,8 @@ export async function updateTask(
   try {
     const id = req.params.id as string;
     const data = req.body as UpdateTaskInput;
-    const task = await taskService.updateTask(id, data);
+    const user = (req as any).user;
+    const task = await taskService.updateTask(id, data, user);
 
     res.json({
       success: true,

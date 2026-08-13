@@ -11,8 +11,10 @@ import { ConfirmDialog } from "../components/ui/ConfirmDialog";
 import { createTask, updateTask, deleteTask } from "../api/taskApi";
 import type { Task, CreateTaskData, UpdateTaskData } from "../types";
 import toast from "react-hot-toast";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function TasksPage() {
+  const { user: currentUser } = useAuth();
   const { tasks, pagination, loading, params, updateParams, refresh } =
     useTasks();
   const { users } = useUsers({ isTeamMember: true });
@@ -98,6 +100,7 @@ export default function TasksPage() {
         sortBy={params.sortBy}
         sortOrder={params.sortOrder}
         onSort={handleSort}
+        currentUser={currentUser}
       />
 
       {/* Pagination */}
@@ -118,13 +121,13 @@ export default function TasksPage() {
         onSubmit={editingTask ? handleUpdate : handleCreate}
         task={editingTask}
         users={users}
+        currentUser={currentUser}
       />
 
       {/* Task detail slide-over */}
       <TaskDetail
         taskId={viewTaskId}
         onClose={() => setViewTaskId(null)}
-        users={users}
       />
 
       {/* Delete confirmation */}

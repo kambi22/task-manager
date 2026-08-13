@@ -10,10 +10,15 @@ interface TaskRowProps {
   onEdit: (task: Task) => void;
   onDelete: (task: Task) => void;
   onView: (task: Task) => void;
+  currentUser?: { id: string; role: "USER" | "ADMIN"; name: string } | null;
 }
 
-export function TaskRow({ task, onEdit, onDelete, onView }: TaskRowProps) {
+export function TaskRow({ task, onEdit, onDelete, onView, currentUser }: TaskRowProps) {
   const [showMenu, setShowMenu] = useState(false);
+
+  const isAdmin = currentUser?.role === "ADMIN";
+  const isAssignee = task.assignedTo === currentUser?.id;
+  const canEdit = isAdmin || isAssignee;
 
   return (
     <tr
@@ -66,16 +71,18 @@ export function TaskRow({ task, onEdit, onDelete, onView }: TaskRowProps) {
       {/* Actions */}
       <td className="px-4 py-4 whitespace-nowrap">
         <div className="flex items-center gap-2">
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onEdit(task);
-            }}
-            className="p-2 rounded-full border border-white/10 bg-slate-800/50 hover:bg-white/15 text-slate-300 hover:text-white transition-all cursor-pointer shadow-sm"
-            title="Edit task"
-          >
-            <Pencil size={14} />
-          </button>
+          {canEdit && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onEdit(task);
+              }}
+              className="p-2 rounded-full border border-white/10 bg-slate-800/50 hover:bg-white/15 text-slate-300 hover:text-white transition-all cursor-pointer shadow-sm"
+              title="Edit task"
+            >
+              <Pencil size={14} />
+            </button>
+          )}
 
           <div className="relative">
             <button
@@ -110,17 +117,19 @@ export function TaskRow({ task, onEdit, onDelete, onView }: TaskRowProps) {
                     <Eye size={15} className="text-blue-400" />
                     View Details
                   </button>
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onDelete(task);
-                      setShowMenu(false);
-                    }}
-                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/15 transition-colors cursor-pointer"
-                  >
-                    <Trash2 size={15} />
-                    Delete Task
-                  </button>
+                  {isAdmin && (
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onDelete(task);
+                        setShowMenu(false);
+                      }}
+                      className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/15 transition-colors cursor-pointer"
+                    >
+                      <Trash2 size={15} />
+                      Delete Task
+                    </button>
+                  )}
                 </div>
               </>
             )}

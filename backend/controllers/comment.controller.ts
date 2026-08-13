@@ -36,7 +36,11 @@ export async function createComment(
   try {
     const taskId = req.params.taskId as string;
     const data = req.body as CreateCommentInput;
-    const comment = await commentService.createComment(taskId, data);
+    const userId = (req as any).user.userId;
+    const comment = await commentService.createComment(taskId, {
+      ...data,
+      userId,
+    });
 
     res.status(201).json({
       success: true,
@@ -59,7 +63,8 @@ export async function deleteComment(
   try {
     const taskId = req.params.taskId as string;
     const id = req.params.id as string;
-    await commentService.deleteComment(taskId, id);
+    const user = (req as any).user;
+    await commentService.deleteComment(taskId, id, user);
 
     res.json({
       success: true,

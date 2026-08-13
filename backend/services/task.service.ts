@@ -3,6 +3,8 @@ import { userRepository } from "../repositories/user.repository";
 import ApiError from "../utils/ApiError";
 import { buildPaginationMeta } from "../utils/pagination";
 import type { TaskQueryParams, CreateTaskData, UpdateTaskData } from "../models/task.model";
+import type { Role } from "../models/user.model";
+
 
 export class TaskService {
   async getTasks(query: TaskQueryParams) {
@@ -65,10 +67,24 @@ export class TaskService {
     return taskRepository.create(data);
   }
 
-  async updateTask(id: string, data: UpdateTaskData) {
+  async updateTask(id: string, data: UpdateTaskData, requester: { userId: string; role: Role }) {
     const existing = await taskRepository.findRawById(id);
     if (!existing) {
       throw ApiError.notFound("Task not found");
+    }
+
+    if (requester.role !== "ADMIN") {
+      if (existing.assignedTo !== requester.userId) {
+        throw ApiError.forbidden("Access denied: You are not authorized to update this task");
+      }
+      
+      const fields = Object.keys(data);
+      const invalidFields = fields.filter(
+        (key) => key !== "status" && data[key as keyof UpdateTaskData] !== undefined
+      );
+      if (invalidFields.length > 0) {
+        throw ApiError.forbidden("Access denied: You can only update the status of this task");
+      }
     }
 
     if (data.assignedTo) {

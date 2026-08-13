@@ -12,10 +12,13 @@ interface TaskFormProps {
   onSubmit: (data: CreateTaskData | UpdateTaskData) => Promise<void>;
   task?: Task | null; // null = create mode, Task = edit mode
   users: User[];
+  currentUser?: { id: string; role: "USER" | "ADMIN"; name: string } | null;
 }
 
-export function TaskForm({ isOpen, onClose, onSubmit, task, users }: TaskFormProps) {
+export function TaskForm({ isOpen, onClose, onSubmit, task, users, currentUser }: TaskFormProps) {
   const isEditMode = !!task;
+  const isAdmin = currentUser?.role === "ADMIN";
+  const disableNonStatusFields = isEditMode && !isAdmin;
 
   const [formData, setFormData] = useState({
     title: "",
@@ -123,6 +126,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users }: TaskFormPro
           }
           error={errors.title}
           autoFocus
+          disabled={disableNonStatusFields}
         />
 
         <Textarea
@@ -133,6 +137,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users }: TaskFormPro
             setFormData((prev) => ({ ...prev, description: e.target.value }))
           }
           error={errors.description}
+          disabled={disableNonStatusFields}
         />
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
@@ -158,6 +163,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users }: TaskFormPro
                 priority: e.target.value as TaskPriority,
               }))
             }
+            disabled={disableNonStatusFields}
           />
         </div>
 
@@ -170,6 +176,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users }: TaskFormPro
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, assignedTo: e.target.value }))
             }
+            disabled={disableNonStatusFields}
           />
 
           <Input
@@ -179,6 +186,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users }: TaskFormPro
             onChange={(e) =>
               setFormData((prev) => ({ ...prev, dueDate: e.target.value }))
             }
+            disabled={disableNonStatusFields}
           />
         </div>
 

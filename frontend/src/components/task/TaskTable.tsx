@@ -12,6 +12,7 @@ interface TaskTableProps {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
   onSort?: (field: string) => void;
+  currentUser?: { id: string; role: "USER" | "ADMIN"; name: string } | null;
 }
 
 const columns = [
@@ -64,6 +65,7 @@ export function TaskTable({
   sortBy,
   sortOrder,
   onSort,
+  currentUser,
 }: TaskTableProps) {
   return (
     <div className="glass-panel rounded-3xl overflow-hidden shadow-2xl">
@@ -118,6 +120,7 @@ export function TaskTable({
                   onEdit={onEdit}
                   onDelete={onDelete}
                   onView={onView}
+                  currentUser={currentUser}
                 />
               ))
             )}

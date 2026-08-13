@@ -1,22 +1,22 @@
 import { useState, useEffect } from "react";
-import type { Comment, User } from "../../types";
+import type { Comment } from "../../types";
 import { getComments, createComment, deleteComment } from "../../api/commentApi";
 import { Avatar } from "../ui/Avatar";
 import { ConfirmDialog } from "../ui/ConfirmDialog";
 import { formatRelativeTime } from "../../utils/formatDate";
 import { Send, Trash2 } from "lucide-react";
 import toast from "react-hot-toast";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface CommentSectionProps {
   taskId: string;
-  users: User[];
 }
 
-export function CommentSection({ taskId, users }: CommentSectionProps) {
+export function CommentSection({ taskId }: CommentSectionProps) {
+  const { user: currentUser } = useAuth();
   const [comments, setComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [commentText, setCommentText] = useState("");
-  const [selectedUserId, setSelectedUserId] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<Comment | null>(null);
   const [deleting, setDeleting] = useState(false);
@@ -33,26 +33,20 @@ export function CommentSection({ taskId, users }: CommentSectionProps) {
     }
   };
 
+  // Fetch comments
   useEffect(() => {
     fetchComments();
   }, [taskId]);
 
-  // Default to first user if available
-  useEffect(() => {
-    if (users.length > 0 && !selectedUserId) {
-      setSelectedUserId(users[0].id);
-    }
-  }, [users]);
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!commentText.trim() || !selectedUserId) return;
+    if (!commentText.trim() || !currentUser) return;
 
     setSubmitting(true);
     try {
       await createComment(taskId, {
         comment: commentText,
-        userId: selectedUserId,
+        userId: currentUser.id,
       });
       setCommentText("");
       toast.success("Comment added");
@@ -118,12 +112,14 @@ export function CommentSection({ taskId, users }: CommentSectionProps) {
                   <span className="text-[10px] text-slate-600">
                     {formatRelativeTime(comment.createdAt)}
                   </span>
-                  <button
-                    onClick={() => setDeleteTarget(comment)}
-                    className="ml-auto p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-red-500/10 text-slate-600 hover:text-red-400 transition-all cursor-pointer"
-                  >
-                    <Trash2 size={12} />
-                  </button>
+                  {currentUser && (currentUser.role === "ADMIN" || comment.userId === currentUser.id) && (
+                    <button
+                      onClick={() => setDeleteTarget(comment)}
+                      className="ml-auto p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-red-500/10 text-slate-600 hover:text-red-400 transition-all cursor-pointer"
+                    >
+                      <Trash2 size={12} />
+                    </button>
+                  )}
                 </div>
                 <p className="mt-1 text-sm text-slate-400 bg-slate-800/50 rounded-lg px-3 py-2">
                   {comment.comment}
@@ -135,24 +131,12 @@ export function CommentSection({ taskId, users }: CommentSectionProps) {
       </div>
 
       {/* Add comment form */}
-      <form onSubmit={handleSubmit} className="flex gap-2 items-end">
-        <select
-          value={selectedUserId}
-          onChange={(e) => setSelectedUserId(e.target.value)}
-          className="
-            px-2 py-2 rounded-lg text-xs
-            bg-slate-900/50 border border-slate-700/50
-            text-slate-400 focus:outline-none focus:ring-1 focus:ring-blue-500/30
-            appearance-none cursor-pointer w-28 flex-shrink-0
-          "
-        >
-          {users.map((u) => (
-            <option key={u.id} value={u.id} className="bg-slate-800">
-              {u.name}
-            </option>
-          ))}
-        </select>
-
+      <form onSubmit={handleSubmit} className="flex gap-3 items-center">
+        {currentUser && (
+          <div className="flex-shrink-0">
+            <Avatar name={currentUser.name} size="sm" />
+          </div>
+        )}
         <div className="relative flex-1">
           <input
             type="text"

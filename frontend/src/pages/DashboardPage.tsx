@@ -1,10 +1,9 @@
-import { ListTodo, Clock, CheckCircle2, AlertTriangle, PieChart, Wrench, Filter, FileText, Hourglass } from "lucide-react";
+import { ListTodo, Clock, CheckCircle2, AlertTriangle, PieChart, Wrench, Filter, FileText, Hourglass, User } from "lucide-react";
 import { useDashboard } from "../hooks/useDashboard";
 import { StatsCard, StatsCardSkeleton } from "../components/ui/StatsCard";
 import { PageHeader } from "../components/layout/PageHeader";
 import { TaskTable } from "../components/task/TaskTable";
 import { useTasks } from "../hooks/useTasks";
-import { useUsers } from "../hooks/useUsers";
 import { useState } from "react";
 import type { Task } from "../types";
 import { TaskDetail } from "../components/task/TaskDetail";
@@ -12,7 +11,6 @@ import { TaskDetail } from "../components/task/TaskDetail";
 export default function DashboardPage() {
   const { stats, loading: statsLoading } = useDashboard();
   const { tasks, loading: tasksLoading } = useTasks({ limit: 5, sortBy: "createdAt", sortOrder: "desc" });
-  const { users } = useUsers({ isTeamMember: true });
   const [viewTaskId, setViewTaskId] = useState<string | null>(null);
 
   return (
@@ -23,9 +21,10 @@ export default function DashboardPage() {
       />
 
       {/* Stats cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 stagger-children">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 stagger-children">
         {statsLoading ? (
           <>
+            <StatsCardSkeleton />
             <StatsCardSkeleton />
             <StatsCardSkeleton />
             <StatsCardSkeleton />
@@ -74,6 +73,14 @@ export default function DashboardPage() {
               gradient="pink"
               change="+3%"
             />
+            <StatsCard
+              title="Assigned to Me"
+              value={stats.myTasksCount || 0}
+              icon={<User size={20} />}
+              secondaryIcon={<CheckCircle2 size={18} />}
+              gradient="blue"
+              change=""
+            />
           </>
         ) : null}
       </div>
@@ -96,7 +103,6 @@ export default function DashboardPage() {
       <TaskDetail
         taskId={viewTaskId}
         onClose={() => setViewTaskId(null)}
-        users={users}
       />
     </div>
   );

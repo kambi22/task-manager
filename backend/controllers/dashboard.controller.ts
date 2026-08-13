@@ -11,7 +11,8 @@ export async function getDashboard(
   next: NextFunction
 ): Promise<void> {
   try {
-    const data = await dashboardService.getDashboardStats();
+    const userId = (req as any).user?.userId;
+    const data = await dashboardService.getDashboardStats(userId);
 
     res.json({
       success: true,

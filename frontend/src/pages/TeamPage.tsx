@@ -8,8 +8,11 @@ import { Button } from "../components/ui/Button";
 import { Modal } from "../components/ui/Modal";
 import { Globe, Building2, Download, RefreshCw, Layers, Search, CheckSquare, Mail } from "lucide-react";
 import toast from "react-hot-toast";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function TeamPage() {
+  const { user: currentUser } = useAuth();
+  const isAdmin = currentUser?.role === "ADMIN";
   // Query only users that are team members
   const { users, loading, refresh } = useUsers({ isTeamMember: true });
   // Query users that are NOT team members for the add member list
@@ -103,19 +106,21 @@ export default function TeamPage() {
         title="Team Management"
         subtitle={`${users.length} active internal team members`}
         actions={
-          <div className="flex items-center gap-3">
-            <Button
-              variant="secondary"
-              onClick={() => setShowExternal((prev) => !prev)}
-            >
-              <Globe size={16} />
-              {showExternal ? "Hide External API Users" : "Explore External Directory"}
-            </Button>
-            <Button onClick={() => setShowPicker(true)}>
-              <CheckSquare size={16} />
-              Add Member
-            </Button>
-          </div>
+          isAdmin ? (
+            <div className="flex items-center gap-3">
+              <Button
+                variant="secondary"
+                onClick={() => setShowExternal((prev) => !prev)}
+              >
+                <Globe size={16} />
+                {showExternal ? "Hide External API Users" : "Explore External Directory"}
+              </Button>
+              <Button onClick={() => setShowPicker(true)}>
+                <CheckSquare size={16} />
+                Add Member
+              </Button>
+            </div>
+          ) : undefined
         }
       />
 

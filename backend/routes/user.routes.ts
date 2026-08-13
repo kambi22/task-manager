@@ -7,6 +7,7 @@ import {
   addUsersToTeam,
 } from "../controllers/user.controller";
 import { validate } from "../middleware/validate";
+import { authenticate, authorize } from "../middleware/auth";
 import {
   createUserSchema,
   updateUserSchema,
@@ -15,10 +16,10 @@ import {
 
 const router = Router();
 
-router.get("/users", getUsers);
-router.post("/users", validate(createUserSchema), createUser);
-router.post("/users/add-to-team", validate(addUsersToTeamSchema), addUsersToTeam);
-router.put("/users/:id", validate(updateUserSchema), updateUser);
-router.delete("/users/:id", deleteUser);
+router.get("/users", authenticate, getUsers);
+router.post("/users", authenticate, authorize(["ADMIN"]), validate(createUserSchema), createUser);
+router.post("/users/add-to-team", authenticate, authorize(["ADMIN"]), validate(addUsersToTeamSchema), addUsersToTeam);
+router.put("/users/:id", authenticate, authorize(["ADMIN"]), validate(updateUserSchema), updateUser);
+router.delete("/users/:id", authenticate, authorize(["ADMIN"]), deleteUser);
 
 export default router;
