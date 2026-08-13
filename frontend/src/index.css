@@ -3,14 +3,14 @@
 /* ── Base reset & theme ─────────────────────────────────────────────── */
 @layer base {
   :root {
-    --bg-primary: #0f172a;
-    --bg-secondary: #1e293b;
-    --bg-tertiary: #334155;
-    --bg-glass: rgba(30, 41, 59, 0.7);
-    --text-primary: #f1f5f9;
+    --bg-primary: #0b0f19;
+    --bg-secondary: rgba(18, 26, 43, 0.7);
+    --bg-tertiary: rgba(30, 41, 59, 0.8);
+    --bg-glass: rgba(15, 23, 42, 0.55);
+    --border-glass: rgba(255, 255, 255, 0.1);
+    --text-primary: #f8fafc;
     --text-secondary: #94a3b8;
     --text-muted: #64748b;
-    --border-color: rgba(51, 65, 85, 0.6);
     --accent-blue: #3b82f6;
     --accent-indigo: #6366f1;
   }
@@ -26,6 +26,7 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    min-height: 100vh;
   }
 
   /* Custom scrollbar */
@@ -39,40 +40,94 @@
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--bg-tertiary);
+    background: rgba(148, 163, 184, 0.2);
     border-radius: 3px;
   }
 
   ::-webkit-scrollbar-thumb:hover {
-    background: var(--text-muted);
+    background: rgba(148, 163, 184, 0.4);
   }
 }
 
-/* ── Custom Utilities & Animations ────────────────────────────────── */
+/* ── Glassmorphism & Custom Utilities ───────────────────────────────── */
 @layer utilities {
-  /* Glassmorphism utility */
-  .glass {
-    background: var(--bg-glass);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid var(--border-color);
+  /* Core Glassmorphism panel */
+  .glass-panel {
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   }
 
-  /* Gradient backgrounds for stats cards */
+  .glass-sidebar {
+    background: rgba(11, 17, 30, 0.65);
+    backdrop-filter: blur(24px) saturate(190%);
+    -webkit-backdrop-filter: blur(24px) saturate(190%);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 10px 0 30px rgba(0, 0, 0, 0.3), inset -1px 0 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-card {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .glass-input {
+    background: rgba(15, 23, 42, 0.5);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-input:focus {
+    border-color: rgba(59, 130, 246, 0.6);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  }
+
+  /* Legacy .glass utility fallback */
+  .glass {
+    background: rgba(15, 23, 42, 0.6);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Gradient backgrounds for stats cards matching reference screenshot */
   .gradient-blue {
-    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #6366f1 45%, #7c3aed 100%);
+    box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.4);
   }
 
   .gradient-teal {
-    background: linear-gradient(135deg, #10b981 0%, #14b8a6 100%);
+    background: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #06b6d4 100%);
+    box-shadow: 0 10px 25px -5px rgba(20, 184, 166, 0.4);
   }
 
   .gradient-orange {
-    background: linear-gradient(135deg, #f59e0b 0%, #f97316 100%);
+    background: linear-gradient(135deg, #d97706 0%, #f59e0b 50%, #fbbf24 100%);
+    box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.4);
   }
 
   .gradient-pink {
-    background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+    background: linear-gradient(135deg, #e11d48 0%, #f43f5e 50%, #fb7185 100%);
+    box-shadow: 0 10px 25px -5px rgba(244, 63, 94, 0.4);
+  }
+
+  .gradient-purple {
+    background: linear-gradient(135deg, #7c3aed 0%, #8b5cf6 50%, #a855f7 100%);
+    box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.4);
+  }
+
+  /* Pill Badges with Glow */
+  .pill-badge {
+    border-radius: 9999px;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
   }
 
   /* Animations */
@@ -89,11 +144,6 @@
   @keyframes slideInRight {
     from { opacity: 0; transform: translateX(100%); }
     to { opacity: 1; transform: translateX(0); }
-  }
-
-  @keyframes slideOutRight {
-    from { opacity: 1; transform: translateX(0); }
-    to { opacity: 0; transform: translateX(100%); }
   }
 
   @keyframes shimmer {
@@ -126,9 +176,9 @@
   .skeleton {
     background: linear-gradient(
       90deg,
-      var(--bg-secondary) 25%,
-      var(--bg-tertiary) 50%,
-      var(--bg-secondary) 75%
+      rgba(30, 41, 59, 0.5) 25%,
+      rgba(51, 65, 85, 0.6) 50%,
+      rgba(30, 41, 59, 0.5) 75%
     );
     background-size: 200% 100%;
     animation: shimmer 1.5s infinite;
@@ -158,3 +208,4 @@
   .stagger-children > *:nth-child(9) { animation-delay: 0.45s; }
   .stagger-children > *:nth-child(10) { animation-delay: 0.5s; }
 }
+

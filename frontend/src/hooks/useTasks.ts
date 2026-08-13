@@ -10,8 +10,6 @@ export function useTasks(initialParams: TaskQueryParams = {}) {
   const [params, setParams] = useState<TaskQueryParams>({
     page: 1,
     limit: 10,
-    sortBy: "createdAt",
-    sortOrder: "desc",
     ...initialParams,
   });
 

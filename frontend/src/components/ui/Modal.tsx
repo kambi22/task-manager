@@ -52,7 +52,7 @@ export function Modal({
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 sm:p-6 overflow-y-auto">
       {/* Overlay background covering full screen with blur */}
       <div
-        className="fixed inset-0 bg-slate-950/75 backdrop-blur-md animate-overlay"
+        className="fixed inset-0 bg-slate-950/80 backdrop-blur-md animate-overlay"
         onClick={onClose}
       />
 
@@ -60,18 +60,17 @@ export function Modal({
       <div
         className={`
           relative w-full ${sizeClasses[size]} max-h-[90vh] flex flex-col
-          bg-slate-900 border border-slate-700/70
-          rounded-2xl shadow-2xl shadow-black/80
+          glass-panel rounded-3xl shadow-2xl shadow-black/80
           animate-slide-up my-auto z-10 overflow-hidden
         `}
       >
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between px-5 sm:px-6 py-4 border-b border-slate-700/50 bg-slate-900/90 flex-shrink-0">
-            <h2 className="text-base sm:text-lg font-semibold text-slate-100">{title}</h2>
+          <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-slate-900/40 flex-shrink-0">
+            <h2 className="text-lg font-bold text-slate-100">{title}</h2>
             <button
               onClick={onClose}
-              className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-slate-100 transition-colors cursor-pointer border border-white/10"
             >
               <X size={18} />
             </button>
@@ -79,9 +78,10 @@ export function Modal({
         )}
 
         {/* Body */}
-        <div className="px-5 sm:px-6 py-4 sm:py-5 overflow-y-auto flex-1">{children}</div>
+        <div className="px-6 py-5 overflow-y-auto flex-1">{children}</div>
       </div>
     </div>,
     document.body
   );
 }
+

@@ -81,6 +81,7 @@ export default function TasksPage() {
       <TaskFilters
         params={params}
         onUpdateParams={updateParams}
+        users={users}
         onCreateClick={() => {
           setEditingTask(null);
           setShowForm(true);

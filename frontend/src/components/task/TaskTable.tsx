@@ -26,7 +26,7 @@ const columns = [
 // Skeleton row
 function SkeletonRow() {
   return (
-    <tr className="border-b border-slate-800/50">
+    <tr className="border-b border-white/5">
       <td className="px-5 py-4">
         <div className="space-y-2">
           <div className="skeleton w-48 h-4" />
@@ -66,64 +66,65 @@ export function TaskTable({
   onSort,
 }: TaskTableProps) {
   return (
-    <div className="bg-slate-800/30 border border-slate-700/30 rounded-2xl overflow-hidden">
+    <div className="glass-panel rounded-3xl overflow-hidden shadow-2xl">
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[650px]">
-        <thead>
-          <tr className="border-b border-slate-700/50">
-            {columns.map((col) => (
-              <th
-                key={col.key}
-                className={`
-                  px-5 py-3.5 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider
-                  ${col.sortable && onSort ? "cursor-pointer hover:text-slate-300 transition-colors select-none" : ""}
-                `}
-                onClick={() => col.sortable && onSort?.(col.key)}
-              >
-                <div className="flex items-center gap-1.5">
-                  {col.label}
-                  {col.sortable && sortBy === col.key && (
-                    <ArrowUpDown
-                      size={12}
-                      className={`text-blue-400 ${
-                        sortOrder === "asc" ? "rotate-180" : ""
-                      } transition-transform`}
-                    />
-                  )}
-                </div>
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {loading ? (
-            <>
-              <SkeletonRow />
-              <SkeletonRow />
-              <SkeletonRow />
-              <SkeletonRow />
-              <SkeletonRow />
-            </>
-          ) : tasks.length === 0 ? (
-            <tr>
-              <td colSpan={columns.length}>
-                <EmptyState />
-              </td>
+        <table className="w-full min-w-[700px]">
+          <thead>
+            <tr className="border-b border-white/10 bg-slate-900/30">
+              {columns.map((col) => (
+                <th
+                  key={col.key}
+                  className={`
+                    px-5 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider
+                    ${col.sortable && onSort ? "cursor-pointer hover:text-white transition-colors select-none" : ""}
+                  `}
+                  onClick={() => col.sortable && onSort?.(col.key)}
+                >
+                  <div className="flex items-center gap-1.5">
+                    {col.label}
+                    {col.sortable && sortBy === col.key && (
+                      <ArrowUpDown
+                        size={13}
+                        className={`text-blue-400 ${
+                          sortOrder === "asc" ? "rotate-180" : ""
+                        } transition-transform`}
+                      />
+                    )}
+                  </div>
+                </th>
+              ))}
             </tr>
-          ) : (
-            tasks.map((task) => (
-              <TaskRow
-                key={task.id}
-                task={task}
-                onEdit={onEdit}
-                onDelete={onDelete}
-                onView={onView}
-              />
-            ))
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody className="divide-y divide-white/5">
+            {loading ? (
+              <>
+                <SkeletonRow />
+                <SkeletonRow />
+                <SkeletonRow />
+                <SkeletonRow />
+                <SkeletonRow />
+              </>
+            ) : tasks.length === 0 ? (
+              <tr>
+                <td colSpan={columns.length}>
+                  <EmptyState />
+                </td>
+              </tr>
+            ) : (
+              tasks.map((task) => (
+                <TaskRow
+                  key={task.id}
+                  task={task}
+                  onEdit={onEdit}
+                  onDelete={onDelete}
+                  onView={onView}
+                />
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
-  </div>
-);
+  );
 }
+

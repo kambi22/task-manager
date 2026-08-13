@@ -17,17 +17,17 @@ export function TaskRow({ task, onEdit, onDelete, onView }: TaskRowProps) {
 
   return (
     <tr
-      className="group border-b border-slate-800/50 hover:bg-white/[0.02] transition-colors cursor-pointer"
+      className="group hover:bg-slate-800/40 transition-colors cursor-pointer"
       onClick={() => onView(task)}
     >
       {/* Task Title */}
-      <td className="px-5 py-4 max-w-[300px]">
+      <td className="px-5 py-4 max-w-[320px]">
         <div>
-          <p className="text-sm font-medium text-slate-200 truncate">
+          <p className="text-sm font-semibold text-slate-100 group-hover:text-blue-300 transition-colors truncate">
             {task.title}
           </p>
           {task.description && (
-            <p className="text-xs text-slate-500 truncate mt-0.5">
+            <p className="text-xs text-slate-400 truncate mt-0.5 font-normal">
               {task.description}
             </p>
           )}
@@ -35,43 +35,43 @@ export function TaskRow({ task, onEdit, onDelete, onView }: TaskRowProps) {
       </td>
 
       {/* Status */}
-      <td className="px-4 py-4">
+      <td className="px-4 py-4 whitespace-nowrap">
         <StatusBadge status={task.status} />
       </td>
 
       {/* Priority */}
-      <td className="px-4 py-4">
+      <td className="px-4 py-4 whitespace-nowrap">
         <PriorityBadge priority={task.priority} />
       </td>
 
       {/* Assignee */}
-      <td className="px-4 py-4">
+      <td className="px-4 py-4 whitespace-nowrap">
         {task.user ? (
           <div className="flex items-center gap-2.5">
             <Avatar name={task.user.name} size="sm" />
-            <span className="text-sm text-slate-300">{task.user.name}</span>
+            <span className="text-sm font-medium text-slate-200">{task.user.name}</span>
           </div>
         ) : (
-          <span className="text-sm text-slate-600">Unassigned</span>
+          <span className="text-sm text-slate-500">Unassigned</span>
         )}
       </td>
 
       {/* Due Date */}
-      <td className="px-4 py-4">
-        <span className="text-sm text-slate-400">
+      <td className="px-4 py-4 whitespace-nowrap">
+        <span className="text-sm font-medium text-slate-300">
           {formatDate(task.dueDate)}
         </span>
       </td>
 
       {/* Actions */}
-      <td className="px-4 py-4">
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+      <td className="px-4 py-4 whitespace-nowrap">
+        <div className="flex items-center gap-2">
           <button
             onClick={(e) => {
               e.stopPropagation();
               onEdit(task);
             }}
-            className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+            className="p-2 rounded-full border border-white/10 bg-slate-800/50 hover:bg-white/15 text-slate-300 hover:text-white transition-all cursor-pointer shadow-sm"
             title="Edit task"
           >
             <Pencil size={14} />
@@ -83,7 +83,7 @@ export function TaskRow({ task, onEdit, onDelete, onView }: TaskRowProps) {
                 e.stopPropagation();
                 setShowMenu(!showMenu);
               }}
-              className="p-1.5 rounded-lg hover:bg-white/10 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+              className="p-2 rounded-full border border-white/10 bg-slate-800/50 hover:bg-white/15 text-slate-300 hover:text-white transition-all cursor-pointer shadow-sm"
               title="More actions"
             >
               <MoreHorizontal size={14} />
@@ -98,16 +98,16 @@ export function TaskRow({ task, onEdit, onDelete, onView }: TaskRowProps) {
                     setShowMenu(false);
                   }}
                 />
-                <div className="absolute right-0 top-8 z-20 w-40 bg-slate-800 border border-slate-700/50 rounded-xl shadow-xl overflow-hidden animate-fade-in">
+                <div className="absolute right-0 top-10 z-20 w-44 bg-slate-900/90 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl overflow-hidden animate-fade-in py-1">
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
                       onView(task);
                       setShowMenu(false);
                     }}
-                    className="flex items-center gap-2 w-full px-3 py-2.5 text-sm text-slate-300 hover:bg-white/5 transition-colors cursor-pointer"
+                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-white/10 transition-colors cursor-pointer"
                   >
-                    <Eye size={14} />
+                    <Eye size={15} className="text-blue-400" />
                     View Details
                   </button>
                   <button
@@ -116,10 +116,10 @@ export function TaskRow({ task, onEdit, onDelete, onView }: TaskRowProps) {
                       onDelete(task);
                       setShowMenu(false);
                     }}
-                    className="flex items-center gap-2 w-full px-3 py-2.5 text-sm text-red-400 hover:bg-red-500/10 transition-colors cursor-pointer"
+                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/15 transition-colors cursor-pointer"
                   >
-                    <Trash2 size={14} />
-                    Delete
+                    <Trash2 size={15} />
+                    Delete Task
                   </button>
                 </div>
               </>
@@ -130,3 +130,4 @@ export function TaskRow({ task, onEdit, onDelete, onView }: TaskRowProps) {
     </tr>
   );
 }
+

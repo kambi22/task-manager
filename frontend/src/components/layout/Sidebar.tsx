@@ -3,10 +3,6 @@ import {
   LayoutDashboard,
   CheckSquare,
   Users,
-  FolderKanban,
-  Calendar,
-  BarChart3,
-  Settings,
   Zap,
   X,
 } from "lucide-react";
@@ -15,10 +11,6 @@ const navItems = [
   { path: "/", icon: LayoutDashboard, label: "Dashboard" },
   { path: "/tasks", icon: CheckSquare, label: "Tasks" },
   { path: "/team", icon: Users, label: "Team" },
-  { path: "/projects", icon: FolderKanban, label: "Projects" },
-  { path: "/calendar", icon: Calendar, label: "Calendar" },
-  { path: "/analytics", icon: BarChart3, label: "Analytics" },
-  { path: "/settings", icon: Settings, label: "Settings" },
 ];
 
 interface SidebarProps {
@@ -32,7 +24,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
       {/* Mobile Backdrop Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden animate-overlay"
+          className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-40 lg:hidden animate-overlay"
           onClick={onClose}
         />
       )}
@@ -40,18 +32,19 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
       {/* Sidebar Aside Drawer */}
       <aside
         className={`
-          fixed top-0 left-0 h-screen w-[220px] bg-slate-900/95 lg:bg-slate-900/80 backdrop-blur-xl border-r border-slate-800/80 flex flex-col z-50
-          transition-transform duration-300 ease-in-out
+          fixed top-0 left-0 lg:top-4 lg:left-4 h-screen lg:h-[calc(100vh-2rem)] w-[230px]
+          glass-sidebar lg:rounded-3xl flex flex-col z-50
+          transition-all duration-300 ease-in-out
           ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}
         `}
       >
         {/* Logo Header */}
-        <div className="flex items-center justify-between px-5 py-5 border-b border-slate-800/60">
-          <div className="flex items-center gap-2.5">
-            <div className="p-1.5 rounded-lg bg-gradient-to-br from-blue-500 to-indigo-600">
-              <Zap size={18} className="text-white" />
+        <div className="flex items-center justify-between px-6 py-6 border-b border-white/10">
+          <div className="flex items-center gap-3">
+            <div className="p-2 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-cyan-400 shadow-lg shadow-blue-500/30 flex items-center justify-center">
+              <Zap size={20} className="text-white fill-white/20" />
             </div>
-            <span className="text-lg font-bold text-slate-100 tracking-tight">
+            <span className="text-xl font-bold text-white tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
               TaskFlow
             </span>
           </div>
@@ -60,7 +53,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           {onClose && (
             <button
               onClick={onClose}
-              className="lg:hidden p-1.5 rounded-lg hover:bg-white/5 text-slate-400 hover:text-slate-200 transition-colors"
+              className="lg:hidden p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
             >
               <X size={18} />
             </button>
@@ -68,7 +61,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
+        <nav className="flex-1 py-6 px-3 space-y-1.5 overflow-y-auto">
           {navItems.map((item) => (
             <NavLink
               key={item.path}
@@ -76,25 +69,25 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
               end={item.path === "/"}
               onClick={onClose}
               className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group
+                `flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-200 group relative
                 ${
                   isActive
-                    ? "bg-blue-600/15 text-blue-400"
-                    : "text-slate-400 hover:bg-white/5 hover:text-slate-200"
+                    ? "bg-slate-700/40 text-white border border-white/15 shadow-lg shadow-black/20"
+                    : "text-slate-400 hover:bg-white/5 hover:text-slate-100 border border-transparent"
                 }`
               }
             >
               {({ isActive }) => (
                 <>
                   <item.icon
-                    size={18}
+                    size={19}
                     className={`transition-colors ${
-                      isActive ? "text-blue-400" : "text-slate-500 group-hover:text-slate-300"
+                      isActive ? "text-blue-400" : "text-slate-400 group-hover:text-slate-200"
                     }`}
                   />
-                  <span>{item.label}</span>
+                  <span className="tracking-wide">{item.label}</span>
                   {isActive && (
-                    <div className="ml-auto w-1.5 h-1.5 rounded-full bg-blue-400" />
+                    <div className="ml-auto w-2 h-2 rounded-full bg-blue-400 shadow-sm shadow-blue-400/80" />
                   )}
                 </>
               )}
@@ -103,12 +96,16 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         </nav>
 
         {/* Footer */}
-        <div className="px-5 py-4 border-t border-slate-800/60">
-          <p className="text-[10px] text-slate-600 text-center">
-            TaskFlow v1.0
-          </p>
+        <div className="px-6 py-4 border-t border-white/10">
+          <div className="flex items-center justify-between text-xs text-slate-400">
+            <span>TaskFlow Pro</span>
+            <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-semibold text-[10px]">
+              v1.0
+            </span>
+          </div>
         </div>
       </aside>
     </>
   );
 }
+

@@ -1,4 +1,4 @@
-import { ListTodo, Clock, CheckCircle2, AlertTriangle } from "lucide-react";
+import { ListTodo, Clock, CheckCircle2, AlertTriangle, PieChart, Wrench, Filter, FileText, Hourglass } from "lucide-react";
 import { useDashboard } from "../hooks/useDashboard";
 import { StatsCard, StatsCardSkeleton } from "../components/ui/StatsCard";
 import { PageHeader } from "../components/layout/PageHeader";
@@ -16,16 +16,17 @@ export default function DashboardPage() {
   const [viewTaskId, setViewTaskId] = useState<string | null>(null);
 
   return (
-    <div className="animate-fade-in">
+    <div className="animate-fade-in space-y-6">
       <PageHeader
         title="Dashboard"
-        subtitle="Overview of your project tasks and team activity"
+        subtitle="Overview of team tasks, metrics, and activity"
       />
 
       {/* Stats cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8 stagger-children">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 stagger-children">
         {statsLoading ? (
           <>
+            <StatsCardSkeleton />
             <StatsCardSkeleton />
             <StatsCardSkeleton />
             <StatsCardSkeleton />
@@ -37,25 +38,41 @@ export default function DashboardPage() {
               title="Total Tasks"
               value={stats.totalTasks}
               icon={<ListTodo size={20} />}
+              secondaryIcon={<FileText size={18} />}
               gradient="blue"
+              change="+12%"
+            />
+            <StatsCard
+              title="Pending"
+              value={stats.byStatus?.Pending || 0}
+              icon={<Hourglass size={20} />}
+              secondaryIcon={<Clock size={18} />}
+              gradient="purple"
+              change="+2%"
             />
             <StatsCard
               title="In Progress"
               value={stats.byStatus?.InProgress || 0}
               icon={<Clock size={20} />}
+              secondaryIcon={<PieChart size={18} />}
               gradient="teal"
+              change="+5%"
             />
             <StatsCard
               title="Completed"
               value={stats.byStatus?.Completed || 0}
               icon={<CheckCircle2 size={20} />}
+              secondaryIcon={<Wrench size={18} />}
               gradient="orange"
+              change="+18%"
             />
             <StatsCard
               title="Overdue"
               value={stats.overdueCount}
               icon={<AlertTriangle size={20} />}
+              secondaryIcon={<Filter size={18} />}
               gradient="pink"
+              change="+3%"
             />
           </>
         ) : null}

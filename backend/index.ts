@@ -11,6 +11,7 @@ import taskRoutes from "./routes/task.routes";
 import userRoutes from "./routes/user.routes";
 import commentRoutes from "./routes/comment.routes";
 import dashboardRoutes from "./routes/dashboard.routes";
+import externalRoutes from "./routes/external.routes";
 
 // Middleware imports
 import { errorHandler } from "./middleware/errorHandler";
@@ -55,6 +56,7 @@ app.use("/api", taskRoutes);
 app.use("/api", userRoutes);
 app.use("/api", commentRoutes);
 app.use("/api", dashboardRoutes);
+app.use("/api", externalRoutes);
 
 // Global error handler (must be after routes)
 app.use(errorHandler);

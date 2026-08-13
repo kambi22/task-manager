@@ -9,9 +9,9 @@ export function StatusBadge({ status }: StatusBadgeProps) {
   const config = STATUS_CONFIG[status];
   return (
     <span
-      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold ${config.bg} ${config.text}`}
+      className={`inline-flex items-center gap-1.5 px-3 py-1 pill-badge text-xs font-semibold ${config.bg} ${config.text} ${config.border}`}
     >
-      <span className={`w-1.5 h-1.5 rounded-full ${config.dot}`} />
+      <span className={`w-1.5 h-1.5 rounded-full ${config.dot} animate-pulse`} />
       {config.label}
     </span>
   );
@@ -25,9 +25,10 @@ export function PriorityBadge({ priority }: PriorityBadgeProps) {
   const config = PRIORITY_CONFIG[priority];
   return (
     <span
-      className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-bold tracking-wide ${config.bg} ${config.text}`}
+      className={`inline-flex items-center px-3 py-1 pill-badge text-xs font-bold tracking-wide ${config.bg} ${config.text} ${config.border}`}
     >
       {config.label}
     </span>
   );
 }
+
