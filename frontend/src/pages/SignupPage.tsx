@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { Zap, User, Mail, Lock, Eye, EyeOff, UserPlus } from "lucide-react";
+import { Zap, User, Mail, Lock, Eye, EyeOff, UserPlus, Shield } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function SignupPage() {
@@ -13,6 +13,7 @@ export default function SignupPage() {
     email: "",
     password: "",
     confirmPassword: "",
+    role: "ADMIN" as "USER" | "ADMIN",
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
@@ -44,6 +45,7 @@ export default function SignupPage() {
         name: formData.name,
         email: formData.email,
         password: formData.password,
+        role: formData.role,
       });
       toast.success("Account created successfully!");
       navigate("/", { replace: true });
@@ -217,6 +219,40 @@ export default function SignupPage() {
                   {errors.confirmPassword}
                 </p>
               )}
+            </div>
+
+            {/* Role selection */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-300 mb-1.5 uppercase tracking-wider">
+                Select Role (testing/development)
+              </label>
+              <div className="relative">
+                <Shield
+                  size={16}
+                  className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"
+                />
+                <select
+                  value={formData.role}
+                  onChange={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      role: e.target.value as "USER" | "ADMIN",
+                    }))
+                  }
+                  className="
+                    w-full pl-10 pr-4 py-3 rounded-xl
+                    bg-slate-800/60 border border-slate-700/50
+                    text-sm text-white placeholder-slate-500 outline-none
+                    transition-all duration-200 focus:ring-2 focus:ring-blue-500/40
+                    appearance-none cursor-pointer
+                    bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22/%3E%3C/svg%3E')]
+                    bg-[position:right_14px_center] bg-no-repeat pr-10
+                  "
+                >
+                  <option value="ADMIN" className="bg-slate-900 text-white">ADMIN (Default)</option>
+                  <option value="USER" className="bg-slate-900 text-white">USER</option>
+                </select>
+              </div>
             </div>
 
             {/* Submit */}
