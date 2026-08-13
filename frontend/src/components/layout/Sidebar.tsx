@@ -1,16 +1,21 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   CheckSquare,
   Users,
+  UserCog,
   Zap,
   X,
+  LogOut,
 } from "lucide-react";
+import { useAuth } from "../../contexts/AuthContext";
+import { Avatar } from "../ui/Avatar";
 
 const navItems = [
   { path: "/", icon: LayoutDashboard, label: "Dashboard" },
   { path: "/tasks", icon: CheckSquare, label: "Tasks" },
   { path: "/team", icon: Users, label: "Team" },
+  { path: "/users", icon: UserCog, label: "Users" },
 ];
 
 interface SidebarProps {
@@ -19,6 +24,14 @@ interface SidebarProps {
 }
 
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
+
   return (
     <>
       {/* Mobile Backdrop Overlay */}
@@ -95,17 +108,30 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           ))}
         </nav>
 
-        {/* Footer */}
-        <div className="px-6 py-4 border-t border-white/10">
-          <div className="flex items-center justify-between text-xs text-slate-400">
-            <span>TaskFlow Pro</span>
-            <span className="px-2 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30 font-semibold text-[10px]">
-              v1.0
-            </span>
-          </div>
+        {/* User & Logout Footer */}
+        <div className="px-4 py-4 border-t border-white/10 space-y-3">
+          {user && (
+            <div className="flex items-center gap-3 px-2">
+              <Avatar name={user.name} size="sm" />
+              <div className="flex-1 min-w-0">
+                <p className="text-xs font-semibold text-slate-200 truncate">
+                  {user.name}
+                </p>
+                <p className="text-[10px] text-slate-500 truncate">
+                  {user.email}
+                </p>
+              </div>
+            </div>
+          )}
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all duration-200 cursor-pointer border border-transparent hover:border-rose-500/20"
+          >
+            <LogOut size={16} />
+            <span>Sign Out</span>
+          </button>
         </div>
       </aside>
     </>
   );
 }
-

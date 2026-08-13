@@ -69,6 +69,12 @@ export interface CreateUserData {
   role?: Role;
 }
 
+export interface UpdateUserData {
+  name?: string;
+  email?: string;
+  role?: Role;
+}
+
 export interface CreateCommentData {
   comment: string;
   userId: string;
