@@ -1,0 +1,69 @@
+# Environment & Secret Files
+.env
+.env.*
+*.env
+*.local
+!.env.example
+
+# AI Documentation, Instructions & Agent Metadata
+ai.md
+AI.md
+*.ai.md
+AGENTS.md
+agents.md
+.agents/
+SKILL.md
+skills/
+.gemini/
+.claude/
+.cursor/
+.cursorrules
+.copilot/
+prompts/
+PROMPTS.md
+brain/
+walkthrough.md
+implementation_plan.md
+*.ai
+
+# Dependencies
+node_modules/
+*/node_modules/
+.pnpm-store/
+
+# Build & Distribution Outputs
+dist/
+*/dist/
+dist-ssr/
+build/
+out/
+*.tsbuildinfo
+
+# Databases & Local Storage
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+prisma/*.db
+prisma/dev.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# IDE & OS Files
+.vscode/
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+*.suo
+*.user
+*.sln
+*.swp
+Management/

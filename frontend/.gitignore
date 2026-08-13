@@ -1,0 +1,40 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Dependencies
+node_modules
+
+# Build & Output
+dist
+dist-ssr
+build
+
+# Environment & Secrets
+.env
+.env.*
+*.local
+!.env.example
+
+# AI Files
+ai.md
+AI.md
+*.ai.md
+AGENTS.md
+.agents/
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
