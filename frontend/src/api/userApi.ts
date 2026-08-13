@@ -1,14 +1,8 @@
 import axiosClient from "./axiosClient";
-import type { ApiResponse, User, CreateUserData } from "../types";
+import type { ApiResponse, User, CreateUserData, UpdateUserData } from "../types";
 
-export interface UpdateUserData {
-  name?: string;
-  email?: string;
-  role?: "USER" | "ADMIN";
-}
-
-export async function getUsers(): Promise<User[]> {
-  const res = await axiosClient.get<ApiResponse<User[]>>("/users");
+export async function getUsers(params?: { isTeamMember?: boolean }): Promise<User[]> {
+  const res = await axiosClient.get<ApiResponse<User[]>>("/users", { params });
   return res.data.data;
 }
 
@@ -23,6 +17,10 @@ export async function updateUser(
 ): Promise<User> {
   const res = await axiosClient.put<ApiResponse<User>>(`/users/${id}`, data);
   return res.data.data;
+}
+
+export async function addUsersToTeam(userIds: string[]): Promise<void> {
+  await axiosClient.post("/users/add-to-team", { userIds });
 }
 
 export async function deleteUser(id: string): Promise<void> {

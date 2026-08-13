@@ -15,7 +15,7 @@ import toast from "react-hot-toast";
 export default function TasksPage() {
   const { tasks, pagination, loading, params, updateParams, refresh } =
     useTasks();
-  const { users } = useUsers();
+  const { users } = useUsers({ isTeamMember: true });
 
   // Modal state
   const [showForm, setShowForm] = useState(false);

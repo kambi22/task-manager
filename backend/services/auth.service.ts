@@ -33,6 +33,7 @@ export class AuthService {
         name: user.name,
         email: user.email,
         role: user.role,
+        isTeamMember: user.isTeamMember,
         createdAt: user.createdAt,
       },
       token,
@@ -61,6 +62,7 @@ export class AuthService {
         name: user.name,
         email: user.email,
         role: user.role,
+        isTeamMember: user.isTeamMember,
         createdAt: user.createdAt,
       },
       token,
@@ -80,6 +82,7 @@ export class AuthService {
       name: user.name,
       email: user.email,
       role: user.role,
+      isTeamMember: user.isTeamMember,
       createdAt: user.createdAt,
     };
   }

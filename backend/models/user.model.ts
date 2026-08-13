@@ -6,6 +6,7 @@ export interface UserModel {
   email: string;
   password: string;
   role: Role;
+  isTeamMember: boolean;
   createdAt: Date;
 }
 
@@ -15,6 +16,7 @@ export interface UserSelectModel {
   name: string;
   email: string;
   role: Role;
+  isTeamMember: boolean;
   createdAt: Date;
 }
 
@@ -22,6 +24,7 @@ export interface CreateUserData {
   name: string;
   email: string;
   role?: Role;
+  isTeamMember?: boolean;
 }
 
 export interface SignupData {
@@ -43,6 +46,6 @@ export interface AuthResponse {
 
 export interface UpdateUserData {
   name?: string;
-  email?: string;
   role?: Role;
+  isTeamMember?: boolean;
 }

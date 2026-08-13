@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from "express";
 import { userService } from "../services/user.service";
-import type { CreateUserInput } from "../schemas/user.schema";
+import type { CreateUserInput, AddUsersToTeamInput } from "../schemas/user.schema";
 import type { UpdateUserData } from "../models/user.model";
 
 /**
  * GET /api/users
- * List all users.
+ * List all users with optional filtering.
  */
 export async function getUsers(
   req: Request,
@@ -13,7 +13,19 @@ export async function getUsers(
   next: NextFunction
 ): Promise<void> {
   try {
-    const users = await userService.getAllUsers();
+    const isTeamMemberQuery = req.query.isTeamMember;
+    let isTeamMember: boolean | undefined = undefined;
+
+    if (isTeamMemberQuery === "true") {
+      isTeamMember = true;
+    } else if (isTeamMemberQuery === "false") {
+      isTeamMember = false;
+    }
+
+    const users = await userService.getAllUsers(
+      isTeamMember !== undefined ? { isTeamMember } : undefined
+    );
+
     res.json({
       success: true,
       data: users,
@@ -60,6 +72,27 @@ export async function updateUser(
     res.json({
       success: true,
       data: user,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+/**
+ * POST /api/users/add-to-team
+ * Bulk add users to the team.
+ */
+export async function addUsersToTeam(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { userIds } = req.body as AddUsersToTeamInput;
+    await userService.addUsersToTeam(userIds);
+    res.json({
+      success: true,
+      message: "Users added to team successfully",
     });
   } catch (error) {
     next(error);

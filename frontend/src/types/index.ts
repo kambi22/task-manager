@@ -9,6 +9,7 @@ export interface User {
   name: string;
   email: string;
   role: Role;
+  isTeamMember: boolean;
   createdAt: string;
 }
 
@@ -67,12 +68,13 @@ export interface CreateUserData {
   name: string;
   email: string;
   role?: Role;
+  isTeamMember?: boolean;
 }
 
 export interface UpdateUserData {
   name?: string;
-  email?: string;
   role?: Role;
+  isTeamMember?: boolean;
 }
 
 export interface CreateCommentData {

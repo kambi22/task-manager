@@ -2,14 +2,21 @@ import prisma from "../config/prisma";
 import type { CreateUserData, UpdateUserData } from "../models/user.model";
 
 export class UserRepository {
-  /** Get all users (never returns password) */
-  async findAll() {
+  /** Get all users (never returns password) with optional filtering by isTeamMember */
+  async findAll(filters?: { isTeamMember?: boolean }) {
+    const where: any = {};
+    if (filters?.isTeamMember !== undefined) {
+      where.isTeamMember = filters.isTeamMember;
+    }
+
     return prisma.user.findMany({
+      where,
       select: {
         id: true,
         name: true,
         email: true,
         role: true,
+        isTeamMember: true,
         createdAt: true,
       },
       orderBy: { name: "asc" },
@@ -25,6 +32,7 @@ export class UserRepository {
         name: true,
         email: true,
         role: true,
+        isTeamMember: true,
         createdAt: true,
       },
     });
@@ -39,6 +47,7 @@ export class UserRepository {
         name: true,
         email: true,
         role: true,
+        isTeamMember: true,
         createdAt: true,
       },
     });
@@ -54,6 +63,7 @@ export class UserRepository {
         email: true,
         password: true,
         role: true,
+        isTeamMember: true,
         createdAt: true,
       },
     });
@@ -67,12 +77,14 @@ export class UserRepository {
         email: data.email,
         password: data.password || "",
         role: data.role,
+        isTeamMember: data.isTeamMember ?? false,
       },
       select: {
         id: true,
         name: true,
         email: true,
         role: true,
+        isTeamMember: true,
         createdAt: true,
       },
     });
@@ -88,7 +100,20 @@ export class UserRepository {
         name: true,
         email: true,
         role: true,
+        isTeamMember: true,
         createdAt: true,
+      },
+    });
+  }
+
+  /** Update team status for multiple users in bulk */
+  async updateManyTeamStatus(ids: string[], isTeamMember: boolean) {
+    return prisma.user.updateMany({
+      where: {
+        id: { in: ids },
+      },
+      data: {
+        isTeamMember,
       },
     });
   }

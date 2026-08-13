@@ -1,27 +1,24 @@
 import { useState, useEffect } from "react";
 import { useUsers } from "../hooks/useUsers";
-import { createUser } from "../api/userApi";
+import { createUser, addUsersToTeam } from "../api/userApi";
 import { getExternalUsers, type ExternalUser } from "../api/externalApi";
 import { PageHeader } from "../components/layout/PageHeader";
 import { Avatar } from "../components/ui/Avatar";
 import { Button } from "../components/ui/Button";
 import { Modal } from "../components/ui/Modal";
-import { Input } from "../components/ui/Input";
-import { Select } from "../components/ui/Select";
-import { UserPlus, Mail, Shield, Globe, Building2, Download, RefreshCw, Layers } from "lucide-react";
-import type { Role } from "../types";
+import { Globe, Building2, Download, RefreshCw, Layers, Search, CheckSquare, Mail } from "lucide-react";
 import toast from "react-hot-toast";
 
 export default function TeamPage() {
-  const { users, loading, refresh } = useUsers();
-  const [showForm, setShowForm] = useState(false);
+  // Query only users that are team members
+  const { users, loading, refresh } = useUsers({ isTeamMember: true });
+  // Query users that are NOT team members for the add member list
+  const { users: nonTeamUsers, loading: loadingNonTeam, refresh: refreshNonTeam } = useUsers({ isTeamMember: false });
+
+  const [showPicker, setShowPicker] = useState(false);
+  const [pickerSearch, setPickerSearch] = useState("");
+  const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    role: "USER" as Role,
-  });
-  const [errors, setErrors] = useState<Record<string, string>>({});
 
   // External API integration state (Section 7 requirement)
   const [externalUsers, setExternalUsers] = useState<ExternalUser[]>([]);
@@ -55,41 +52,50 @@ export default function TeamPage() {
         name: extUser.name,
         email: extUser.email,
         role: "USER",
+        isTeamMember: true, // External users imported directly into team
       });
       toast.success(`Imported ${extUser.name} successfully!`);
       refresh();
+      refreshNonTeam();
     } catch (err: any) {
       toast.error(err.message || "Import failed");
     }
   };
 
-  const validate = () => {
-    const newErrors: Record<string, string> = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required";
-    if (!formData.email.trim()) newErrors.email = "Email is required";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-      newErrors.email = "Invalid email address";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
+  const handleToggleUser = (id: string) => {
+    setSelectedUserIds((prev) =>
+      prev.includes(id) ? prev.filter((uid) => uid !== id) : [...prev, id]
+    );
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleAddMembers = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validate()) return;
+    if (selectedUserIds.length === 0) {
+      toast.error("Please select at least one user");
+      return;
+    }
 
     setSubmitting(true);
     try {
-      await createUser(formData);
-      toast.success("Team member added");
-      setShowForm(false);
-      setFormData({ name: "", email: "", role: "USER" });
+      await addUsersToTeam(selectedUserIds);
+      toast.success(`${selectedUserIds.length} members added to team`);
+      setShowPicker(false);
+      setSelectedUserIds([]);
+      setPickerSearch("");
       refresh();
+      refreshNonTeam();
     } catch (err: any) {
-      toast.error(err.message || "Failed to add team member");
+      toast.error(err.message || "Failed to add team members");
     } finally {
       setSubmitting(false);
     }
   };
+
+  const filteredNonTeam = nonTeamUsers.filter(
+    (u) =>
+      u.name.toLowerCase().includes(pickerSearch.toLowerCase()) ||
+      u.email.toLowerCase().includes(pickerSearch.toLowerCase())
+  );
 
   return (
     <div className="animate-fade-in space-y-8">
@@ -105,8 +111,8 @@ export default function TeamPage() {
               <Globe size={16} />
               {showExternal ? "Hide External API Users" : "Explore External Directory"}
             </Button>
-            <Button onClick={() => setShowForm(true)}>
-              <UserPlus size={16} />
+            <Button onClick={() => setShowPicker(true)}>
+              <CheckSquare size={16} />
               Add Member
             </Button>
           </div>
@@ -203,113 +209,130 @@ export default function TeamPage() {
         <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
           <Layers size={14} /> Internal Team Directory
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 stagger-children">
-          {loading
-            ? Array.from({ length: 8 }).map((_, i) => (
-                <div
-                  key={i}
-                  className="bg-slate-800/30 border border-slate-700/30 rounded-2xl p-5"
-                >
-                  <div className="flex flex-col items-center text-center">
-                    <div className="skeleton w-14 h-14 rounded-full mb-3" />
-                    <div className="skeleton w-24 h-4 mb-2" />
-                    <div className="skeleton w-32 h-3 mb-3" />
-                    <div className="skeleton w-16 h-5 rounded-full" />
-                  </div>
-                </div>
-              ))
-            : users.map((user) => (
-                <div
-                  key={user.id}
-                  className="bg-slate-800/30 border border-slate-700/30 rounded-2xl p-5 hover:bg-white/[0.02] hover:border-slate-600/40 transition-all duration-200 group"
-                >
-                  <div className="flex flex-col items-center text-center">
-                    <Avatar name={user.name} size="lg" className="mb-3" />
-                    <h3 className="text-sm font-semibold text-slate-200">
-                      {user.name}
-                    </h3>
-                    <div className="flex items-center gap-1.5 mt-1 text-slate-500">
-                      <Mail size={12} />
-                      <span className="text-xs truncate max-w-[180px]">
-                        {user.email}
-                      </span>
-                    </div>
-                    <div className="mt-3">
-                      <span
-                        className={`
-                          inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider
-                          ${
-                            user.role === "ADMIN"
-                              ? "bg-indigo-500/15 text-indigo-400"
-                              : "bg-slate-500/15 text-slate-400"
-                          }
-                        `}
-                      >
-                        <Shield size={10} />
-                        {user.role}
-                      </span>
+        {users.length === 0 ? (
+          <div className="glass-panel p-8 text-center rounded-2xl border border-slate-800">
+            <p className="text-sm text-slate-500">No active team members. Click "Add Member" to build your team!</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 stagger-children">
+            {loading
+              ? Array.from({ length: 8 }).map((_, i) => (
+                  <div
+                    key={i}
+                    className="bg-slate-800/30 border border-slate-700/30 rounded-2xl p-5"
+                  >
+                    <div className="flex flex-col items-center text-center">
+                      <div className="skeleton w-14 h-14 rounded-full mb-3" />
+                      <div className="skeleton w-24 h-4 mb-2" />
+                      <div className="skeleton w-32 h-3 mb-3" />
+                      <div className="skeleton w-16 h-5 rounded-full" />
                     </div>
                   </div>
-                </div>
-              ))}
-        </div>
+                ))
+              : users.map((user) => (
+                  <div
+                    key={user.id}
+                    className="bg-slate-800/30 border border-slate-700/30 rounded-2xl p-5 hover:bg-white/[0.02] hover:border-slate-600/40 transition-all duration-200 group"
+                  >
+                    <div className="flex flex-col items-center text-center">
+                      <Avatar name={user.name} size="lg" className="mb-3" />
+                      <h3 className="text-sm font-semibold text-slate-200">
+                        {user.name}
+                      </h3>
+                      <div className="flex items-center gap-1.5 mt-1 text-slate-500">
+                        <Mail size={12} />
+                        <span className="text-xs truncate max-w-[180px]">
+                          {user.email}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+          </div>
+        )}
       </div>
 
-      {/* Add member modal */}
+      {/* User Picker Modal */}
       <Modal
-        isOpen={showForm}
+        isOpen={showPicker}
         onClose={() => {
-          setShowForm(false);
-          setErrors({});
+          setShowPicker(false);
+          setSelectedUserIds([]);
+          setPickerSearch("");
         }}
-        title="Add Team Member"
+        title="Add Team Members"
         size="sm"
       >
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <Input
-            label="Name"
-            placeholder="Enter name"
-            value={formData.name}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, name: e.target.value }))
-            }
-            error={errors.name}
-            autoFocus
-          />
-          <Input
-            label="Email"
-            type="email"
-            placeholder="Enter email"
-            value={formData.email}
-            onChange={(e) =>
-              setFormData((prev) => ({ ...prev, email: e.target.value }))
-            }
-            error={errors.email}
-          />
-          <Select
-            label="Role"
-            options={[
-              { value: "USER", label: "User" },
-              { value: "ADMIN", label: "Admin" },
-            ]}
-            value={formData.role}
-            onChange={(e) =>
-              setFormData((prev) => ({
-                ...prev,
-                role: e.target.value as Role,
-              }))
-            }
-          />
+        <form onSubmit={handleAddMembers} className="space-y-4">
+          <p className="text-xs text-slate-400">
+            Select one or more signed up users to add to the internal team.
+          </p>
+
+          <div className="relative">
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <input
+              type="text"
+              placeholder="Search signed up users..."
+              value={pickerSearch}
+              onChange={(e) => setPickerSearch(e.target.value)}
+              className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-800/40 border border-slate-700/50 text-xs text-white placeholder-slate-500 outline-none focus:ring-1 focus:ring-blue-500/50"
+            />
+          </div>
+
+          <div className="max-h-[250px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
+            {loadingNonTeam ? (
+              <div className="text-center py-6 text-xs text-slate-500">Loading registered users...</div>
+            ) : filteredNonTeam.length === 0 ? (
+              <div className="text-center py-6 text-xs text-slate-500">
+                {pickerSearch ? "No matching users found" : "All registered users are already in the team"}
+              </div>
+            ) : (
+              filteredNonTeam.map((u) => (
+                <label
+                  key={u.id}
+                  className={`flex items-center justify-between p-2.5 rounded-xl border transition-all cursor-pointer select-none
+                    ${
+                      selectedUserIds.includes(u.id)
+                        ? "bg-blue-600/10 border-blue-500/50 text-white"
+                        : "bg-slate-800/20 border-slate-700/30 hover:border-slate-600/50 text-slate-300"
+                    }`}
+                >
+                  <div className="flex items-center gap-3">
+                    <Avatar name={u.name} size="sm" />
+                    <div className="min-w-0">
+                      <p className="text-xs font-semibold truncate text-slate-200">{u.name}</p>
+                      <p className="text-[10px] text-slate-500 truncate">{u.email}</p>
+                    </div>
+                  </div>
+                  <input
+                    type="checkbox"
+                    checked={selectedUserIds.includes(u.id)}
+                    onChange={() => handleToggleUser(u.id)}
+                    className="w-4 h-4 rounded border-slate-700 bg-slate-800/40 text-blue-600 focus:ring-blue-500 focus:ring-opacity-25"
+                  />
+                </label>
+              ))
+            )}
+          </div>
+
           <div className="flex justify-end gap-3 pt-4 border-t border-slate-700/50">
             <Button
               variant="secondary"
               type="button"
-              onClick={() => setShowForm(false)}
+              onClick={() => {
+                setShowPicker(false);
+                setSelectedUserIds([]);
+                setPickerSearch("");
+              }}
             >
               Cancel
             </Button>
-            <Button type="submit" isLoading={submitting}>
-              Add Member
+            <Button
+              type="submit"
+              isLoading={submitting}
+              disabled={selectedUserIds.length === 0}
+            >
+              Add Selected ({selectedUserIds.length})
             </Button>
           </div>
         </form>

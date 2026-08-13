@@ -16,6 +16,7 @@ import {
   Calendar,
   Search,
   AlertTriangle,
+  Users,
 } from "lucide-react";
 import type { User, Role } from "../types";
 import toast from "react-hot-toast";
@@ -26,7 +27,12 @@ export default function UsersPage() {
 
   // Edit modal state
   const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [editData, setEditData] = useState({ name: "", email: "", role: "USER" as Role });
+  const [editData, setEditData] = useState({
+    name: "",
+    email: "",
+    role: "USER" as Role,
+    isTeamMember: false,
+  });
   const [editSubmitting, setEditSubmitting] = useState(false);
 
   // Delete confirmation state
@@ -42,7 +48,12 @@ export default function UsersPage() {
 
   const openEdit = (user: User) => {
     setEditingUser(user);
-    setEditData({ name: user.name, email: user.email, role: user.role });
+    setEditData({
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      isTeamMember: user.isTeamMember,
+    });
   };
 
   const handleEdit = async (e: React.FormEvent) => {
@@ -51,7 +62,11 @@ export default function UsersPage() {
 
     setEditSubmitting(true);
     try {
-      await updateUser(editingUser.id, editData);
+      await updateUser(editingUser.id, {
+        name: editData.name,
+        role: editData.role,
+        isTeamMember: editData.isTeamMember,
+      });
       toast.success("User updated successfully");
       setEditingUser(null);
       refresh();
@@ -121,7 +136,7 @@ export default function UsersPage() {
                   Email
                 </th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
-                  Role
+                  Role & Status
                 </th>
                 <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
                   Joined
@@ -190,16 +205,24 @@ export default function UsersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <span
-                        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider ${
-                          user.role === "ADMIN"
-                            ? "bg-indigo-500/15 text-indigo-400"
-                            : "bg-slate-500/15 text-slate-400"
-                        }`}
-                      >
-                        <Shield size={10} />
-                        {user.role}
-                      </span>
+                      <div className="flex items-center gap-2">
+                        <span
+                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider ${
+                            user.role === "ADMIN"
+                              ? "bg-indigo-500/15 text-indigo-400 border border-indigo-500/20"
+                              : "bg-slate-500/15 text-slate-400 border border-slate-700/20"
+                          }`}
+                        >
+                          <Shield size={10} />
+                          {user.role}
+                        </span>
+                        {user.isTeamMember && (
+                          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider bg-emerald-500/15 text-emerald-400 border border-emerald-500/20">
+                            <Users size={10} />
+                            Team
+                          </span>
+                        )}
+                      </div>
                     </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-1.5 text-slate-500">
@@ -253,13 +276,12 @@ export default function UsersPage() {
             autoFocus
           />
           <Input
-            label="Email"
+            label="Email (Not Editable)"
             type="email"
-            placeholder="Enter email"
+            placeholder="Email address"
             value={editData.email}
-            onChange={(e) =>
-              setEditData((prev) => ({ ...prev, email: e.target.value }))
-            }
+            disabled={true}
+            className="opacity-60 cursor-not-allowed bg-slate-800/30"
           />
           <Select
             label="Role"
@@ -272,6 +294,20 @@ export default function UsersPage() {
               setEditData((prev) => ({
                 ...prev,
                 role: e.target.value as Role,
+              }))
+            }
+          />
+          <Select
+            label="Team Membership Status"
+            options={[
+              { value: "false", label: "Not in Team" },
+              { value: "true", label: "Team Member" },
+            ]}
+            value={editData.isTeamMember ? "true" : "false"}
+            onChange={(e) =>
+              setEditData((prev) => ({
+                ...prev,
+                isTeamMember: e.target.value === "true",
               }))
             }
           />

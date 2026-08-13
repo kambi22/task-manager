@@ -12,7 +12,7 @@ import { TaskDetail } from "../components/task/TaskDetail";
 export default function DashboardPage() {
   const { stats, loading: statsLoading } = useDashboard();
   const { tasks, loading: tasksLoading } = useTasks({ limit: 5, sortBy: "createdAt", sortOrder: "desc" });
-  const { users } = useUsers();
+  const { users } = useUsers({ isTeamMember: true });
   const [viewTaskId, setViewTaskId] = useState<string | null>(null);
 
   return (
