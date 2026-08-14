@@ -26,6 +26,26 @@ export interface Comment {
   };
 }
 
+// ── Task History ─────────────────────────────────────────────────────
+export interface TaskHistory {
+  id: string;
+  taskId: string;
+  taskTitle: string;
+  userId: string | null;
+  userName: string;
+  action: "CREATE" | "UPDATE" | "DELETE";
+  details: {
+    message?: string;
+    changes?: string[];
+  } | null;
+  createdAt: string;
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+  } | null;
+}
+
 // ── Task ─────────────────────────────────────────────────────────────
 export interface Task {
   id: string;

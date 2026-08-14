@@ -62,7 +62,8 @@ export async function createTask(
 ): Promise<void> {
   try {
     const data = req.body as CreateTaskInput;
-    const task = await taskService.createTask(data);
+    const user = (req as any).user;
+    const task = await taskService.createTask(data, user);
 
     res.status(201).json({
       success: true,
@@ -108,7 +109,8 @@ export async function deleteTask(
 ): Promise<void> {
   try {
     const id = req.params.id as string;
-    await taskService.deleteTask(id);
+    const user = (req as any).user;
+    await taskService.deleteTask(id, user);
 
     res.json({
       success: true,

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
-import { X, Calendar, User as UserIcon, Flag, Clock } from "lucide-react";
+import { X, Calendar, User as UserIcon, Flag, Clock, Activity } from "lucide-react";
 import type { Task } from "../../types";
 import { getTaskById } from "../../api/taskApi";
 import { StatusBadge, PriorityBadge } from "../ui/Badge";
 import { Avatar } from "../ui/Avatar";
 import { CommentSection } from "./CommentSection";
-import { formatDate } from "../../utils/formatDate";
+import { formatDate, formatRelativeTime } from "../../utils/formatDate";
+import { useTaskHistory } from "../../hooks/useTaskHistory";
 
 interface TaskDetailProps {
   taskId: string | null;
@@ -16,6 +17,7 @@ interface TaskDetailProps {
 export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
   const [task, setTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState<"comments" | "activity">("comments");
 
   useEffect(() => {
     if (!taskId) return;
@@ -176,16 +178,120 @@ export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
                 </div>
               </div>
 
-              {/* Divider */}
-              <div className="border-t border-[var(--border-glass)]" />
+              {/* Tabs header */}
+              <div className="flex border-b border-[var(--border-glass)] mb-5 mt-6">
+                <button
+                  onClick={() => setActiveTab("comments")}
+                  className={`py-2 px-4 text-sm font-semibold tracking-wide border-b-2 transition-all cursor-pointer ${
+                    activeTab === "comments"
+                      ? "border-blue-500 text-blue-400"
+                      : "border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  }`}
+                >
+                  Comments ({task.comments?.length || 0})
+                </button>
+                <button
+                  onClick={() => setActiveTab("activity")}
+                  className={`py-2 px-4 text-sm font-semibold tracking-wide border-b-2 transition-all cursor-pointer ${
+                    activeTab === "activity"
+                      ? "border-blue-500 text-blue-400"
+                      : "border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  }`}
+                >
+                  Activity Log
+                </button>
+              </div>
 
-              {/* Comments */}
-              <CommentSection taskId={task.id} />
+              {/* Tab content */}
+              {activeTab === "comments" ? (
+                <CommentSection taskId={task.id} />
+              ) : (
+                <TaskActivityLog taskId={task.id} />
+              )}
             </>
           )}
         </div>
       </div>
     </div>,
     document.body
+  );
+}
+
+function TaskActivityLog({ taskId }: { taskId: string }) {
+  const { history, loading } = useTaskHistory({ taskId, limit: 50 });
+
+  if (loading) {
+    return (
+      <div className="space-y-4 py-4">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="flex gap-3 animate-pulse">
+            <div className="w-8 h-8 rounded-xl bg-[var(--bg-hover)] flex-shrink-0" />
+            <div className="flex-1 space-y-2">
+              <div className="h-3 bg-[var(--bg-hover)] w-24 rounded" />
+              <div className="h-10 bg-[var(--bg-hover)] w-full rounded-lg" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (history.length === 0) {
+    return (
+      <p className="text-xs text-[var(--text-dimmed)] text-center py-10">
+        No activity logged for this task yet.
+      </p>
+    );
+  }
+
+  const getActionColor = (action: string) => {
+    switch (action) {
+      case "CREATE":
+        return "text-emerald-400";
+      case "UPDATE":
+        return "text-blue-400";
+      case "DELETE":
+        return "text-rose-400";
+      default:
+        return "text-[var(--text-muted)]";
+    }
+  };
+
+  return (
+    <div className="space-y-4 max-h-[350px] overflow-y-auto pr-1">
+      {history.map((log) => (
+        <div key={log.id} className="flex gap-3 text-sm animate-fade-in">
+          <div className="p-2.5 rounded-xl bg-[var(--bg-card)] border border-[var(--border-glass)] flex-shrink-0 h-9 w-9 flex items-center justify-center">
+            <Activity size={14} className="text-blue-400" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-2">
+              <span className="font-semibold text-xs text-[var(--text-secondary)]">
+                {log.userName}
+              </span>
+              <span className="text-[10px] text-[var(--text-dimmed)] flex items-center gap-1">
+                <Clock size={10} />
+                {formatRelativeTime(log.createdAt)}
+              </span>
+            </div>
+            
+            <div className="mt-1 text-xs text-[var(--text-muted)] bg-[var(--bg-card)] rounded-lg p-2.5 border border-[var(--border-glass)]">
+              <span className={`font-bold uppercase tracking-wider text-[9px] mr-1.5 ${getActionColor(log.action)}`}>
+                [{log.action}]
+              </span>
+              {log.details?.changes && log.details.changes.length > 0 ? (
+                <ul className="list-disc pl-3.5 space-y-1 mt-1">
+                  {log.details.changes.map((change: string, idx: number) => (
+                    <li key={idx}>{change}</li>
+                  ))}
+                </ul>
+              ) : (
+                <span>{log.details?.message || "Task action performed."}</span>
+              )}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }

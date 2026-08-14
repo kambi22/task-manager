@@ -9,6 +9,7 @@ import {
   LogOut,
   Sun,
   Moon,
+  History,
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -19,6 +20,7 @@ const navItems = [
   { path: "/tasks", icon: CheckSquare, label: "Tasks" },
   { path: "/team", icon: Users, label: "Team" },
   { path: "/users", icon: UserCog, label: "Users" },
+  { path: "/history", icon: History, label: "History" },
 ];
 
 interface SidebarProps {

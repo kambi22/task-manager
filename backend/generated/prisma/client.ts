@@ -56,3 +56,8 @@ export type Task = Prisma.TaskModel
  * 
  */
 export type Comment = Prisma.CommentModel
+/**
+ * Model TaskHistory
+ * 
+ */
+export type TaskHistory = Prisma.TaskHistoryModel

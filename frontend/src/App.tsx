@@ -6,6 +6,7 @@ import DashboardPage from "./pages/DashboardPage";
 import TasksPage from "./pages/TasksPage";
 import TeamPage from "./pages/TeamPage";
 import UsersPage from "./pages/UsersPage";
+import TaskHistoryPage from "./pages/TaskHistoryPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -30,6 +31,7 @@ export default function App() {
             <Route path="/" element={<DashboardPage />} />
             <Route path="/tasks" element={<TasksPage />} />
             <Route path="/team" element={<TeamPage />} />
+            <Route path="/history" element={<TaskHistoryPage />} />
             <Route
               path="/users"
               element={

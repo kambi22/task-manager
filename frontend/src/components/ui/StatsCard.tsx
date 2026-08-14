@@ -21,7 +21,6 @@ export function StatsCard({
   title,
   value,
   icon,
-  secondaryIcon,
   gradient,
   change,
 }: StatsCardProps) {
