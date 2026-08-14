@@ -14,6 +14,7 @@ import dashboardRoutes from "./routes/dashboard.routes";
 import externalRoutes from "./routes/external.routes";
 import authRoutes from "./routes/auth.routes";
 import taskHistoryRoutes from "./routes/task-history.routes";
+import attachmentRoutes from "./routes/attachment.routes";
 
 // Middleware imports
 import { errorHandler } from "./middleware/errorHandler";
@@ -27,6 +28,7 @@ app.use(
     origin: "http://localhost:5173",
   })
 );
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Health-check routes
 app.get("/", (req: Request, res: Response) => {
@@ -61,6 +63,7 @@ app.use("/api", dashboardRoutes);
 app.use("/api", externalRoutes);
 app.use("/api", authRoutes);
 app.use("/api", taskHistoryRoutes);
+app.use("/api", attachmentRoutes);
 
 // Global error handler (must be after routes)
 app.use(errorHandler);

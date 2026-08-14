@@ -42,6 +42,7 @@ model User {
   tasks    Task[]
   comments Comment[]
   taskHistories TaskHistory[]
+  auditLogs AuditLog[]
 
   @@map("users")
 }
@@ -60,6 +61,7 @@ model Task {
   // Relations
   user     User?     @relation(fields: [assignedTo], references: [id], onDelete: SetNull)
   comments Comment[]
+  attachments Attachment[]
 
   @@map("tasks")
 }
@@ -93,3 +95,38 @@ model TaskHistory {
 
   @@map("task_history")
 }
+
+model Attachment {
+  id        String   @id @default(uuid())
+  taskId    String   @map("task_id")
+  fileName  String   @map("file_name")
+  fileUrl   String   @map("file_url")
+  fileSize  Int      @map("file_size")
+  mimeType  String   @map("mime_type")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  // Relations
+  task Task @relation(fields: [taskId], references: [id], onDelete: Cascade)
+
+  @@map("attachments")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  userId     String?  @map("user_id")
+  userName   String   @map("user_name")
+  userEmail  String   @map("user_email")
+  action     String   // e.g. USER_LOGIN, USER_SIGNUP, USER_DELETE, TASK_CREATE, TASK_UPDATE, TASK_DELETE
+  resource   String   // e.g. Auth, User, Task, Comment, Attachment
+  resourceId String?  @map("resource_id")
+  details    Json?    // e.g. details of the activity (what changed, login success/failure, etc.)
+  ipAddress  String?  @map("ip_address")
+  userAgent  String?  @map("user_agent")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  // Relations
+  user       User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+}
+

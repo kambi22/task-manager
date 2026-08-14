@@ -26,6 +26,17 @@ export interface Comment {
   };
 }
 
+// ── Attachment ───────────────────────────────────────────────────────
+export interface Attachment {
+  id: string;
+  taskId: string;
+  fileName: string;
+  fileUrl: string;
+  fileSize: number;
+  mimeType: string;
+  createdAt: string;
+}
+
 // ── Task History ─────────────────────────────────────────────────────
 export interface TaskHistory {
   id: string;
@@ -63,6 +74,7 @@ export interface Task {
     email: string;
   } | null;
   comments?: Comment[];
+  attachments?: Attachment[];
 }
 
 // ── Create / Update DTOs ─────────────────────────────────────────────

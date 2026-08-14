@@ -24,6 +24,16 @@ export function errorHandler(
     return;
   }
 
+  // Handle Multer upload errors
+  if (err.name === "MulterError") {
+    res.status(400).json({
+      success: false,
+      message: `File upload failed: ${err.message}`,
+      errors: [err.message],
+    });
+    return;
+  }
+
   // Handle custom API errors
   if (err instanceof ApiError) {
     res.status(err.statusCode).json({

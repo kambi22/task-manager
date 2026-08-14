@@ -35,6 +35,9 @@ export class TaskRepository {
           },
           orderBy: { createdAt: "desc" },
         },
+        attachments: {
+          orderBy: { createdAt: "desc" },
+        },
       },
     });
   }

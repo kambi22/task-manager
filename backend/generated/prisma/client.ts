@@ -61,3 +61,8 @@ export type Comment = Prisma.CommentModel
  * 
  */
 export type TaskHistory = Prisma.TaskHistoryModel
+/**
+ * Model Attachment
+ * 
+ */
+export type Attachment = Prisma.AttachmentModel

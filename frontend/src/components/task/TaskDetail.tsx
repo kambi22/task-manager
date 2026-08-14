@@ -8,6 +8,7 @@ import { Avatar } from "../ui/Avatar";
 import { CommentSection } from "./CommentSection";
 import { formatDate, formatRelativeTime } from "../../utils/formatDate";
 import { useTaskHistory } from "../../hooks/useTaskHistory";
+import { AttachmentSection } from "./AttachmentSection";
 
 interface TaskDetailProps {
   taskId: string | null;
@@ -17,7 +18,14 @@ interface TaskDetailProps {
 export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
   const [task, setTask] = useState<Task | null>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"comments" | "activity">("comments");
+  const [activeTab, setActiveTab] = useState<"comments" | "attachments" | "activity">("comments");
+
+  const handleRefresh = () => {
+    if (!taskId) return;
+    getTaskById(taskId)
+      .then(setTask)
+      .catch(() => {});
+  };
 
   useEffect(() => {
     if (!taskId) return;
@@ -191,6 +199,16 @@ export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
                   Comments ({task.comments?.length || 0})
                 </button>
                 <button
+                  onClick={() => setActiveTab("attachments")}
+                  className={`py-2 px-4 text-sm font-semibold tracking-wide border-b-2 transition-all cursor-pointer ${
+                    activeTab === "attachments"
+                      ? "border-blue-500 text-blue-400"
+                      : "border-transparent text-[var(--text-muted)] hover:text-[var(--text-primary)]"
+                  }`}
+                >
+                  Attachments ({task.attachments?.length || 0})
+                </button>
+                <button
                   onClick={() => setActiveTab("activity")}
                   className={`py-2 px-4 text-sm font-semibold tracking-wide border-b-2 transition-all cursor-pointer ${
                     activeTab === "activity"
@@ -203,9 +221,13 @@ export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
               </div>
 
               {/* Tab content */}
-              {activeTab === "comments" ? (
+              {activeTab === "comments" && (
                 <CommentSection taskId={task.id} />
-              ) : (
+              )}
+              {activeTab === "attachments" && (
+                <AttachmentSection task={task} onRefresh={handleRefresh} />
+              )}
+              {activeTab === "activity" && (
                 <TaskActivityLog taskId={task.id} />
               )}
             </>
