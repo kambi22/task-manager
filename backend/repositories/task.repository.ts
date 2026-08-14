@@ -80,6 +80,13 @@ export class TaskRepository {
       where: { id },
     });
   }
+
+  async unassignUserTasks(userId: string) {
+    return prisma.task.updateMany({
+      where: { assignedTo: userId },
+      data: { assignedTo: null },
+    });
+  }
 }
 
 export const taskRepository = new TaskRepository();

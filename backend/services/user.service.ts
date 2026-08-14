@@ -1,4 +1,5 @@
 import { userRepository } from "../repositories/user.repository";
+import { taskRepository } from "../repositories/task.repository";
 import ApiError from "../utils/ApiError";
 import type { CreateUserData, UpdateUserData } from "../models/user.model";
 
@@ -28,6 +29,10 @@ export class UserService {
     const user = await userRepository.findById(id);
     if (!user) {
       throw ApiError.notFound("User not found");
+    }
+
+    if (user.isTeamMember && data.isTeamMember === false) {
+      await taskRepository.unassignUserTasks(id);
     }
 
     // Email is no longer updateable from this service layer

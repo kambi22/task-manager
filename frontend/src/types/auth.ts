@@ -17,6 +17,7 @@ export interface AuthUser {
   name: string;
   email: string;
   role: "USER" | "ADMIN";
+  isTeamMember: boolean;
   createdAt: string;
 }
 

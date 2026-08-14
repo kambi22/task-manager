@@ -11,15 +11,16 @@ interface TaskRowProps {
   onEdit: (task: Task) => void;
   onDelete: (task: Task) => void;
   onView: (task: Task) => void;
-  currentUser?: { id: string; role: "USER" | "ADMIN"; name: string } | null;
+  currentUser?: { id: string; role: "USER" | "ADMIN"; name: string; isTeamMember?: boolean } | null;
 }
 
 export function TaskRow({ task, onEdit, onDelete, onView, currentUser }: TaskRowProps) {
   const [showMenu, setShowMenu] = useState(false);
 
+  const isTeamMember = !!currentUser?.isTeamMember;
   const isAdmin = currentUser?.role === "ADMIN";
   const isAssignee = task.assignedTo === currentUser?.id;
-  const canEdit = isAdmin || isAssignee;
+  const canEdit = isTeamMember && (isAdmin || isAssignee);
 
   return (
     <tr
@@ -84,78 +85,84 @@ export function TaskRow({ task, onEdit, onDelete, onView, currentUser }: TaskRow
               <Pencil size={14} />
             </button>
           ) : (
-            <Tooltip content="Only admins or assignees can edit this task">
-              <button
-                onClick={(e) => e.stopPropagation()}
-                className="p-2 rounded-full border border-white/5 bg-slate-900/30 text-slate-600 cursor-not-allowed opacity-50 shadow-sm"
-                title="Edit task (Locked)"
-              >
-                <Pencil size={14} />
-              </button>
-            </Tooltip>
+            isAdmin && !isTeamMember ? (
+              <Tooltip content="Only Team Member can Access">
+                <button
+                  onClick={(e) => e.stopPropagation()}
+                  className="p-2 rounded-full border border-white/5 bg-slate-900/30 text-slate-600 cursor-not-allowed opacity-50 shadow-sm"
+                  title="Edit task (Locked)"
+                >
+                  <Pencil size={14} />
+                </button>
+              </Tooltip>
+            ) : null
           )}
 
-          <div className="relative">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setShowMenu(!showMenu);
-              }}
-              className="p-2 rounded-full border border-white/10 bg-slate-800/50 hover:bg-white/15 text-slate-300 hover:text-white transition-all cursor-pointer shadow-sm"
-              title="More actions"
-            >
-              <MoreHorizontal size={14} />
-            </button>
+          {(isAdmin || canEdit) && (
+            <div className="relative">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowMenu(!showMenu);
+                }}
+                className="p-2 rounded-full border border-white/10 bg-slate-800/50 hover:bg-white/15 text-slate-300 hover:text-white transition-all cursor-pointer shadow-sm"
+                title="More actions"
+              >
+                <MoreHorizontal size={14} />
+              </button>
 
-            {showMenu && (
-              <>
-                <div
-                  className="fixed inset-0 z-10"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setShowMenu(false);
-                  }}
-                />
-                <div className="absolute right-0 top-10 z-20 w-48 bg-slate-900/90 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl overflow-hidden animate-fade-in py-1">
-                  <button
+              {showMenu && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
                     onClick={(e) => {
                       e.stopPropagation();
-                      onView(task);
                       setShowMenu(false);
                     }}
-                    className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-white/10 transition-colors cursor-pointer"
-                  >
-                    <Eye size={15} className="text-blue-400" />
-                    View Details
-                  </button>
-                  {isAdmin ? (
+                  />
+                  <div className="absolute right-0 top-10 z-20 w-48 bg-slate-900/90 backdrop-blur-2xl border border-white/15 rounded-2xl shadow-2xl overflow-hidden animate-fade-in py-1">
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
-                        onDelete(task);
+                        onView(task);
                         setShowMenu(false);
                       }}
-                      className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/15 transition-colors cursor-pointer"
+                      className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-medium text-slate-200 hover:bg-white/10 transition-colors cursor-pointer"
                     >
-                      <Trash2 size={15} />
-                      Delete Task
+                      <Eye size={15} className="text-blue-400" />
+                      View Details
                     </button>
-                  ) : (
-                    <Tooltip content="Only admin can delete tasks">
-                      <button
-                        onClick={(e) => e.stopPropagation()}
-                        className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-medium text-slate-600 cursor-not-allowed opacity-50"
-                        disabled
-                      >
-                        <Trash2 size={15} />
-                        Delete Task (Locked)
-                      </button>
-                    </Tooltip>
-                  )}
-                </div>
-              </>
-            )}
-          </div>
+                    {isAdmin ? (
+                      isTeamMember ? (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete(task);
+                            setShowMenu(false);
+                          }}
+                          className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-medium text-rose-400 hover:bg-rose-500/15 transition-colors cursor-pointer"
+                        >
+                          <Trash2 size={15} />
+                          Delete Task
+                        </button>
+                      ) : (
+                        <Tooltip content="Only Team Member can Access">
+                          <button
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex items-center gap-2.5 w-full px-4 py-2.5 text-sm font-medium text-slate-600 cursor-not-allowed opacity-50"
+                            disabled
+                          >
+                            <Trash2 size={15} />
+                            Delete Task (Locked)
+                          </button>
+                        </Tooltip>
+                      )
+                    ) : null}
+                  </div>
+                </>
+              )}
+            </div>
+          )}
         </div>
       </td>
     </tr>

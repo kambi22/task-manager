@@ -10,7 +10,7 @@ export function Tooltip({ content, children, disabled = false }: TooltipProps) {
   if (disabled || !content) return <>{children}</>;
 
   return (
-    <div className="relative group inline-block w-full">
+    <div className="relative group inline-block w-full sm:w-auto">
       {children}
       
       {/* Tooltip Content panel */}

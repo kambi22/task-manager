@@ -12,7 +12,7 @@ interface TaskTableProps {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
   onSort?: (field: string) => void;
-  currentUser?: { id: string; role: "USER" | "ADMIN"; name: string } | null;
+  currentUser?: { id: string; role: "USER" | "ADMIN"; name: string; isTeamMember?: boolean } | null;
 }
 
 const columns = [

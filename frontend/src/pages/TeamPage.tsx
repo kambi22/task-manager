@@ -1,18 +1,19 @@
 import { useState, useEffect } from "react";
 import { useUsers } from "../hooks/useUsers";
-import { createUser, addUsersToTeam } from "../api/userApi";
+import { createUser, addUsersToTeam, updateUser } from "../api/userApi";
 import { getExternalUsers, type ExternalUser } from "../api/externalApi";
 import { PageHeader } from "../components/layout/PageHeader";
 import { Avatar } from "../components/ui/Avatar";
 import { Button } from "../components/ui/Button";
 import { Modal } from "../components/ui/Modal";
-import { Globe, Building2, Download, RefreshCw, Layers, Search, CheckSquare, Mail } from "lucide-react";
+import { Globe, Building2, Download, RefreshCw, Layers, Search, CheckSquare, Mail, UserX, AlertTriangle } from "lucide-react";
 import toast from "react-hot-toast";
 import { useAuth } from "../contexts/AuthContext";
 import { Tooltip } from "../components/ui/Tooltip";
+import type { User } from "../types";
 
 export default function TeamPage() {
-  const { user: currentUser } = useAuth();
+  const { user: currentUser, refreshUser } = useAuth();
   const isAdmin = currentUser?.role === "ADMIN";
   // Query only users that are team members
   const { users, loading, refresh } = useUsers({ isTeamMember: true });
@@ -23,6 +24,29 @@ export default function TeamPage() {
   const [pickerSearch, setPickerSearch] = useState("");
   const [selectedUserIds, setSelectedUserIds] = useState<string[]>([]);
   const [submitting, setSubmitting] = useState(false);
+
+  // Exclude member confirmation state
+  const [excludingUser, setExcludingUser] = useState<User | null>(null);
+  const [excludeSubmitting, setExcludeSubmitting] = useState(false);
+
+  const handleExcludeMember = async () => {
+    if (!excludingUser) return;
+    setExcludeSubmitting(true);
+    try {
+      await updateUser(excludingUser.id, { isTeamMember: false });
+      toast.success(`${excludingUser.name} excluded from team`);
+      if (excludingUser.id === currentUser?.id) {
+        await refreshUser();
+      }
+      setExcludingUser(null);
+      refresh();
+      refreshNonTeam();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to exclude member");
+    } finally {
+      setExcludeSubmitting(false);
+    }
+  };
 
   // External API integration state (Section 7 requirement)
   const [externalUsers, setExternalUsers] = useState<ExternalUser[]>([]);
@@ -83,6 +107,9 @@ export default function TeamPage() {
     try {
       await addUsersToTeam(selectedUserIds);
       toast.success(`${selectedUserIds.length} members added to team`);
+      if (selectedUserIds.includes(currentUser?.id || "")) {
+        await refreshUser();
+      }
       setShowPicker(false);
       setSelectedUserIds([]);
       setPickerSearch("");
@@ -108,29 +135,30 @@ export default function TeamPage() {
         subtitle={`${users.length} active internal team members`}
         actions={
           isAdmin ? (
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
               <Button
                 variant="secondary"
                 onClick={() => setShowExternal((prev) => !prev)}
+                className="w-full sm:w-auto"
               >
                 <Globe size={16} />
                 {showExternal ? "Hide External API Users" : "Explore External Directory"}
               </Button>
-              <Button onClick={() => setShowPicker(true)}>
+              <Button onClick={() => setShowPicker(true)} className="w-full sm:w-auto">
                 <CheckSquare size={16} />
                 Add Member
               </Button>
             </div>
           ) : (
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
               <Tooltip content="Only admin can access external directories">
-                <Button variant="secondary" disabled>
+                <Button variant="secondary" disabled className="w-full sm:w-auto">
                   <Globe size={16} />
                   Explore External Directory (Locked)
                 </Button>
               </Tooltip>
               <Tooltip content="Only admin can add members to team">
-                <Button disabled>
+                <Button disabled className="w-full sm:w-auto">
                   <CheckSquare size={16} />
                   Add Member (Locked)
                 </Button>
@@ -266,6 +294,16 @@ export default function TeamPage() {
                           {user.email}
                         </span>
                       </div>
+                      {isAdmin && (
+                        <button
+                          type="button"
+                          onClick={() => setExcludingUser(user)}
+                          className="mt-4 px-3 py-1.5 rounded-xl bg-rose-500/10 hover:bg-rose-500/20 text-rose-400 hover:text-rose-300 text-xs font-semibold border border-rose-500/20 hover:border-rose-500/40 transition-all cursor-pointer flex items-center gap-1.5"
+                        >
+                          <UserX size={12} />
+                          Exclude Member
+                        </button>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -357,6 +395,47 @@ export default function TeamPage() {
             </Button>
           </div>
         </form>
+      </Modal>
+
+      {/* Exclude Confirmation Modal */}
+      <Modal
+        isOpen={!!excludingUser}
+        onClose={() => setExcludingUser(null)}
+        title="Exclude Team Member"
+        size="sm"
+      >
+        <div className="space-y-4">
+          <div className="flex items-start gap-3 p-4 rounded-xl bg-rose-500/10 border border-rose-500/20">
+            <AlertTriangle size={20} className="text-rose-400 mt-0.5 shrink-0" />
+            <div>
+              <p className="text-sm text-rose-300 font-medium">
+                Exclude from team
+              </p>
+              <p className="text-xs text-rose-300/70 mt-1">
+                Are you sure you want to exclude{" "}
+                <span className="font-semibold text-rose-200">
+                  {excludingUser?.name}
+                </span>{" "}
+                from the team? They will be removed from the team directory, and all their currently assigned tasks will be unassigned.
+              </p>
+            </div>
+          </div>
+          <div className="flex justify-end gap-3 pt-2">
+            <Button
+              variant="secondary"
+              onClick={() => setExcludingUser(null)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="danger"
+              onClick={handleExcludeMember}
+              isLoading={excludeSubmitting}
+            >
+              Exclude Member
+            </Button>
+          </div>
+        </div>
       </Modal>
     </div>
   );

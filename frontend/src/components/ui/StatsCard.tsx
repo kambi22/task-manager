@@ -37,11 +37,6 @@ export function StatsCard({
       {/* Subtle overlay shine */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-transparent to-black/20 pointer-events-none" />
 
-      {/* Top right decorative secondary icon */}
-      <div className="absolute top-4 right-4 p-2 rounded-xl bg-white/10 text-white/80 group-hover:scale-110 transition-transform duration-300 backdrop-blur-sm border border-white/15">
-        {secondaryIcon || icon}
-      </div>
-
       {/* Main Content */}
       <div className="relative z-10">
         <div className="flex items-center gap-2.5 mb-5">
@@ -77,7 +72,6 @@ export function StatsCardSkeleton() {
           <div className="skeleton w-9 h-9 rounded-xl" />
           <div className="skeleton w-24 h-4" />
         </div>
-        <div className="skeleton w-8 h-8 rounded-xl" />
       </div>
       <div className="flex items-baseline justify-between mt-2">
         <div className="skeleton w-28 h-9" />

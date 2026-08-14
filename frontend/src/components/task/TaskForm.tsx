@@ -118,7 +118,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users, currentUser }
       size="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        <Tooltip content="Only admin can access; user can't access" disabled={!disableNonStatusFields}>
+        <Tooltip content="Role User Access Denied" disabled={!disableNonStatusFields}>
           <Input
             label="Title"
             placeholder="Enter task title"
@@ -132,7 +132,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users, currentUser }
           />
         </Tooltip>
 
-        <Tooltip content="Only admin can access; user can't access" disabled={!disableNonStatusFields}>
+        <Tooltip content="Role User Access Denied" disabled={!disableNonStatusFields}>
           <Textarea
             label="Description"
             placeholder="Add a description (optional)"
@@ -158,7 +158,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users, currentUser }
             }
           />
 
-          <Tooltip content="Only admin can access; user can't access" disabled={!disableNonStatusFields}>
+          <Tooltip content="Role User Access Denied" disabled={!disableNonStatusFields}>
             <Select
               label="Priority"
               options={priorityOptions}
@@ -175,7 +175,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users, currentUser }
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <Tooltip content="Only admin can access; user can't access" disabled={!disableNonStatusFields}>
+          <Tooltip content="Role User Access Denied" disabled={!disableNonStatusFields}>
             <Select
               label="Assignee"
               options={userOptions}
@@ -188,7 +188,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users, currentUser }
             />
           </Tooltip>
 
-          <Tooltip content="Only admin can access; user can't access" disabled={!disableNonStatusFields}>
+          <Tooltip content="Role User Access Denied" disabled={!disableNonStatusFields}>
             <Input
               label="Due Date"
               type="datetime-local"

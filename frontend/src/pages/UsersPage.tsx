@@ -20,8 +20,10 @@ import {
 } from "lucide-react";
 import type { User, Role } from "../types";
 import toast from "react-hot-toast";
+import { useAuth } from "../contexts/AuthContext";
 
 export default function UsersPage() {
+  const { user: currentUser, refreshUser } = useAuth();
   const { users, loading, refresh } = useUsers();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -68,6 +70,9 @@ export default function UsersPage() {
         isTeamMember: editData.isTeamMember,
       });
       toast.success("User updated successfully");
+      if (editingUser.id === currentUser?.id) {
+        await refreshUser();
+      }
       setEditingUser(null);
       refresh();
     } catch (err: any) {
@@ -233,7 +238,7 @@ export default function UsersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center justify-end gap-2 transition-opacity">
                         <button
                           onClick={() => openEdit(user)}
                           className="p-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/20 text-blue-400 transition-all cursor-pointer"

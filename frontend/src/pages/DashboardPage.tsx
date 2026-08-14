@@ -4,14 +4,63 @@ import { StatsCard, StatsCardSkeleton } from "../components/ui/StatsCard";
 import { PageHeader } from "../components/layout/PageHeader";
 import { TaskTable } from "../components/task/TaskTable";
 import { useTasks } from "../hooks/useTasks";
-import { useState } from "react";
-import type { Task } from "../types";
+import { useState, useCallback } from "react";
+import type { Task, CreateTaskData, UpdateTaskData } from "../types";
 import { TaskDetail } from "../components/task/TaskDetail";
+import { useAuth } from "../contexts/AuthContext";
+import { useUsers } from "../hooks/useUsers";
+import { updateTask, deleteTask } from "../api/taskApi";
+import { TaskForm } from "../components/task/TaskForm";
+import { ConfirmDialog } from "../components/ui/ConfirmDialog";
+import toast from "react-hot-toast";
 
 export default function DashboardPage() {
-  const { stats, loading: statsLoading } = useDashboard();
-  const { tasks, loading: tasksLoading } = useTasks({ limit: 5, sortBy: "createdAt", sortOrder: "desc" });
+  const { user: currentUser } = useAuth();
+  const { stats, loading: statsLoading, refresh: refreshStats } = useDashboard();
+  const { tasks, loading: tasksLoading, refresh: refreshTasks } = useTasks({ limit: 5, sortBy: "createdAt", sortOrder: "desc" });
+  const { users } = useUsers({ isTeamMember: true });
   const [viewTaskId, setViewTaskId] = useState<string | null>(null);
+
+  // Modal states for edit/delete
+  const [showForm, setShowForm] = useState(false);
+  const [editingTask, setEditingTask] = useState<Task | null>(null);
+  const [deleteTarget, setDeleteTarget] = useState<Task | null>(null);
+  const [deleting, setDeleting] = useState(false);
+
+  const handleEdit = useCallback((task: Task) => {
+    setEditingTask(task);
+    setShowForm(true);
+  }, []);
+
+  const handleUpdate = useCallback(async (data: CreateTaskData | UpdateTaskData) => {
+    if (!editingTask) return;
+    try {
+      await updateTask(editingTask.id, data as UpdateTaskData);
+      toast.success("Task updated successfully");
+      setShowForm(false);
+      setEditingTask(null);
+      refreshStats();
+      refreshTasks();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update task");
+    }
+  }, [editingTask, refreshStats, refreshTasks]);
+
+  const handleDelete = useCallback(async () => {
+    if (!deleteTarget) return;
+    setDeleting(true);
+    try {
+      await deleteTask(deleteTarget.id);
+      toast.success("Task deleted successfully");
+      setDeleteTarget(null);
+      refreshStats();
+      refreshTasks();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete task");
+    } finally {
+      setDeleting(false);
+    }
+  }, [deleteTarget, refreshStats, refreshTasks]);
 
   return (
     <div className="animate-fade-in space-y-6">
@@ -93,9 +142,10 @@ export default function DashboardPage() {
         <TaskTable
           tasks={tasks}
           loading={tasksLoading}
-          onEdit={() => {}}
-          onDelete={() => {}}
+          onEdit={handleEdit}
+          onDelete={(task) => setDeleteTarget(task)}
           onView={(task: Task) => setViewTaskId(task.id)}
+          currentUser={currentUser}
         />
       </div>
 
@@ -103,6 +153,29 @@ export default function DashboardPage() {
       <TaskDetail
         taskId={viewTaskId}
         onClose={() => setViewTaskId(null)}
+      />
+
+      {/* Create / Edit modal */}
+      <TaskForm
+        isOpen={showForm}
+        onClose={() => {
+          setShowForm(false);
+          setEditingTask(null);
+        }}
+        onSubmit={handleUpdate}
+        task={editingTask}
+        users={users}
+        currentUser={currentUser}
+      />
+
+      {/* Delete confirmation */}
+      <ConfirmDialog
+        isOpen={!!deleteTarget}
+        title="Delete Task"
+        message={`Are you sure you want to delete "${deleteTarget?.title}"? This action cannot be undone.`}
+        onConfirm={handleDelete}
+        onCancel={() => setDeleteTarget(null)}
+        isLoading={deleting}
       />
     </div>
   );
