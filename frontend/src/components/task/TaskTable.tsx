@@ -27,7 +27,7 @@ const columns = [
 // Skeleton row
 function SkeletonRow() {
   return (
-    <tr className="border-b border-white/5">
+    <tr className="border-b border-[var(--border-glass)]">
       <td className="px-5 py-4">
         <div className="space-y-2">
           <div className="skeleton w-48 h-4" />
@@ -72,13 +72,13 @@ export function TaskTable({
       <div className="overflow-x-auto">
         <table className="w-full min-w-[700px]">
           <thead>
-            <tr className="border-b border-white/10 bg-slate-900/30">
+            <tr className="border-b border-[var(--border-subtle)] bg-[var(--bg-card)]">
               {columns.map((col) => (
                 <th
                   key={col.key}
                   className={`
-                    px-5 py-4 text-left text-xs font-semibold text-slate-400 uppercase tracking-wider
-                    ${col.sortable && onSort ? "cursor-pointer hover:text-white transition-colors select-none" : ""}
+                    px-5 py-4 text-left text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider
+                    ${col.sortable && onSort ? "cursor-pointer hover:text-[var(--text-primary)] transition-colors select-none" : ""}
                   `}
                   onClick={() => col.sortable && onSort?.(col.key)}
                 >
@@ -97,7 +97,7 @@ export function TaskTable({
               ))}
             </tr>
           </thead>
-          <tbody className="divide-y divide-white/5">
+          <tbody className="divide-y divide-[var(--border-glass)]">
             {loading ? (
               <>
                 <SkeletonRow />
@@ -130,4 +130,3 @@ export function TaskTable({
     </div>
   );
 }
-

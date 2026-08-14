@@ -70,8 +70,8 @@ function ComingSoon({ title }: { title: string }) {
   return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] text-center animate-fade-in">
       <div className="text-5xl mb-4">🚧</div>
-      <h1 className="text-xl font-semibold text-slate-300">{title}</h1>
-      <p className="text-sm text-slate-500 mt-1">
+      <h1 className="text-xl font-semibold text-[var(--text-secondary)]">{title}</h1>
+      <p className="text-sm text-[var(--text-muted)] mt-1">
         This feature is coming soon.
       </p>
     </div>

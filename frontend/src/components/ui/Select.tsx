@@ -28,7 +28,7 @@ export function Select({
       {label && (
         <label
           htmlFor={selectId}
-          className="block text-sm font-medium text-slate-300"
+          className="block text-sm font-medium text-[var(--text-secondary)]"
         >
           {label}
         </label>
@@ -37,8 +37,8 @@ export function Select({
         id={selectId}
         className={`
           w-full px-3.5 py-2.5 rounded-lg
-          bg-slate-900/50 border border-slate-700/50
-          text-slate-100
+          bg-[var(--bg-input)] border border-[var(--border-input)]
+          text-[var(--text-primary)]
           focus:outline-none focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/40
           transition-all duration-200
           text-sm appearance-none cursor-pointer
@@ -49,14 +49,14 @@ export function Select({
         `}
         {...props}
       >
-        <option value="" className="bg-slate-800 text-slate-400">
+        <option value="" className="bg-[var(--bg-elevated)] text-[var(--text-muted)]">
           {placeholder}
         </option>
         {options.map((opt) => (
           <option
             key={opt.value}
             value={opt.value}
-            className="bg-slate-800 text-slate-100"
+            className="bg-[var(--bg-elevated)] text-[var(--text-primary)]"
           >
             {opt.label}
           </option>

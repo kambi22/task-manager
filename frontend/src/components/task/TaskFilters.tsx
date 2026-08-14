@@ -50,6 +50,14 @@ export function TaskFilters({
     }
   };
 
+  const filterSelectClass = `
+    flex-1 sm:flex-none px-4 py-2.5 rounded-2xl
+    glass-input text-sm font-medium text-[var(--text-secondary)]
+    focus:outline-none transition-all cursor-pointer appearance-none
+    bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22/%3E%3C/svg%3E')]
+    bg-[position:right_14px_center] bg-no-repeat pr-10
+  `;
+
   return (
     <div className="space-y-3 mb-2">
       {/* Top Filter Row: Search, Assignee, Status, Priority & Create Task */}
@@ -70,19 +78,13 @@ export function TaskFilters({
                 assignee: e.target.value || undefined,
               })
             }
-            className="
-              flex-1 sm:flex-none px-4 py-2.5 rounded-2xl
-              glass-input text-sm font-medium text-slate-200
-              focus:outline-none transition-all cursor-pointer appearance-none
-              bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22/%3E%3C/svg%3E')]
-              bg-[position:right_14px_center] bg-no-repeat pr-10 min-w-[150px]
-            "
+            className={`${filterSelectClass} min-w-[150px]`}
           >
-            <option value="" className="bg-slate-900 text-slate-200">
+            <option value="" className="bg-[var(--bg-elevated)] text-[var(--text-secondary)]">
               All Assignees
             </option>
             {users.map((u) => (
-              <option key={u.id} value={u.id} className="bg-slate-900 text-slate-200">
+              <option key={u.id} value={u.id} className="bg-[var(--bg-elevated)] text-[var(--text-secondary)]">
                 {u.name}
               </option>
             ))}
@@ -97,17 +99,11 @@ export function TaskFilters({
                 status: (e.target.value as TaskStatus) || undefined,
               })
             }
-            className="
-              flex-1 sm:flex-none px-4 py-2.5 rounded-2xl
-              glass-input text-sm font-medium text-slate-200
-              focus:outline-none transition-all cursor-pointer appearance-none
-              bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22/%3E%3C/svg%3E')]
-              bg-[position:right_14px_center] bg-no-repeat pr-10 min-w-[150px]
-            "
+            className={`${filterSelectClass} min-w-[150px]`}
           >
-            <option value="" className="bg-slate-900 text-slate-200">Filter by Status</option>
+            <option value="" className="bg-[var(--bg-elevated)] text-[var(--text-secondary)]">Filter by Status</option>
             {STATUS_OPTIONS.map((s) => (
-              <option key={s} value={s} className="bg-slate-900 text-slate-200">
+              <option key={s} value={s} className="bg-[var(--bg-elevated)] text-[var(--text-secondary)]">
                 {STATUS_CONFIG[s].label}
               </option>
             ))}
@@ -122,17 +118,11 @@ export function TaskFilters({
                 priority: (e.target.value as TaskPriority) || undefined,
               })
             }
-            className="
-              flex-1 sm:flex-none px-4 py-2.5 rounded-2xl
-              glass-input text-sm font-medium text-slate-200
-              focus:outline-none transition-all cursor-pointer appearance-none
-              bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22/%3E%3C/svg%3E')]
-              bg-[position:right_14px_center] bg-no-repeat pr-10 min-w-[140px]
-            "
+            className={`${filterSelectClass} min-w-[140px]`}
           >
-            <option value="" className="bg-slate-900 text-slate-200">Priority</option>
+            <option value="" className="bg-[var(--bg-elevated)] text-[var(--text-secondary)]">Priority</option>
             {PRIORITY_OPTIONS.map((p) => (
-              <option key={p} value={p} className="bg-slate-900 text-slate-200">
+              <option key={p} value={p} className="bg-[var(--bg-elevated)] text-[var(--text-secondary)]">
                 {PRIORITY_CONFIG[p].label}
               </option>
             ))}
@@ -163,19 +153,13 @@ export function TaskFilters({
           aria-label="Sort tasks"
           value={currentSortValue}
           onChange={(e) => handleSortChange(e.target.value)}
-          className="
-            px-4 py-2 rounded-2xl
-            glass-input text-sm font-medium text-slate-200
-            focus:outline-none transition-all cursor-pointer appearance-none
-            bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2394a3b8%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22m6%209%206%206%206-6%22/%3E%3C/svg%3E')]
-            bg-[position:right_14px_center] bg-no-repeat pr-10 min-w-[130px]
-          "
+          className={`${filterSelectClass} min-w-[130px]`}
         >
-          <option value="" className="bg-slate-900 text-slate-200">
+          <option value="" className="bg-[var(--bg-elevated)] text-[var(--text-secondary)]">
             Sort By
           </option>
           {SORT_OPTIONS.map((opt) => (
-            <option key={opt.value} value={opt.value} className="bg-slate-900 text-slate-200">
+            <option key={opt.value} value={opt.value} className="bg-[var(--bg-elevated)] text-[var(--text-secondary)]">
               {opt.label}
             </option>
           ))}
@@ -184,4 +168,3 @@ export function TaskFilters({
     </div>
   );
 }
-

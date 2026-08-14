@@ -75,7 +75,7 @@ export function CommentSection({ taskId }: CommentSectionProps) {
 
   return (
     <div className="mt-6">
-      <h3 className="text-sm font-semibold text-slate-300 mb-4">
+      <h3 className="text-sm font-semibold text-[var(--text-secondary)] mb-4">
         Comments ({comments.length})
       </h3>
 
@@ -94,7 +94,7 @@ export function CommentSection({ taskId }: CommentSectionProps) {
             ))}
           </div>
         ) : comments.length === 0 ? (
-          <p className="text-sm text-slate-600 text-center py-6">
+          <p className="text-sm text-[var(--text-dimmed)] text-center py-6">
             No comments yet. Be the first to comment!
           </p>
         ) : (
@@ -106,22 +106,22 @@ export function CommentSection({ taskId }: CommentSectionProps) {
               <Avatar name={comment.user.name} size="sm" />
               <div className="flex-1">
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-semibold text-slate-300">
+                  <span className="text-xs font-semibold text-[var(--text-secondary)]">
                     {comment.user.name}
                   </span>
-                  <span className="text-[10px] text-slate-600">
+                  <span className="text-[10px] text-[var(--text-dimmed)]">
                     {formatRelativeTime(comment.createdAt)}
                   </span>
                   {currentUser && (currentUser.role === "ADMIN" || comment.userId === currentUser.id) && (
                     <button
                       onClick={() => setDeleteTarget(comment)}
-                      className="ml-auto p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-red-500/10 text-slate-600 hover:text-red-400 transition-all cursor-pointer"
+                      className="ml-auto p-1 rounded opacity-0 group-hover:opacity-100 hover:bg-red-500/10 text-[var(--text-dimmed)] hover:text-red-400 transition-all cursor-pointer"
                     >
                       <Trash2 size={12} />
                     </button>
                   )}
                 </div>
-                <p className="mt-1 text-sm text-slate-400 bg-slate-800/50 rounded-lg px-3 py-2">
+                <p className="mt-1 text-sm text-[var(--text-muted)] bg-[var(--bg-card)] rounded-lg px-3 py-2">
                   {comment.comment}
                 </p>
               </div>
@@ -145,8 +145,8 @@ export function CommentSection({ taskId }: CommentSectionProps) {
             placeholder="Write a comment..."
             className="
               w-full px-3 py-2 pr-10 rounded-lg text-sm
-              bg-slate-900/50 border border-slate-700/50
-              text-slate-200 placeholder-slate-600
+              bg-[var(--bg-input)] border border-[var(--border-input)]
+              text-[var(--text-secondary)] placeholder-[var(--text-dimmed)]
               focus:outline-none focus:ring-1 focus:ring-blue-500/30
               transition-all
             "
@@ -157,7 +157,7 @@ export function CommentSection({ taskId }: CommentSectionProps) {
             className="
               absolute right-2 top-1/2 -translate-y-1/2
               p-1 rounded text-blue-400 hover:text-blue-300
-              disabled:text-slate-600 disabled:cursor-not-allowed
+              disabled:text-[var(--text-dimmed)] disabled:cursor-not-allowed
               transition-colors cursor-pointer
             "
           >

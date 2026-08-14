@@ -14,9 +14,9 @@ const variantClasses: Record<Variant, string> = {
   primary:
     "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white shadow-lg shadow-blue-500/20",
   secondary:
-    "bg-slate-700/50 hover:bg-slate-600/50 text-slate-200 border border-slate-600/50",
+    "bg-[var(--bg-active)] hover:bg-[var(--bg-hover-strong)] text-[var(--text-secondary)] border border-[var(--border-input)]",
   ghost:
-    "bg-transparent hover:bg-white/5 text-slate-300",
+    "bg-transparent hover:bg-[var(--bg-hover)] text-[var(--text-secondary)]",
   danger:
     "bg-red-600/20 hover:bg-red-600/30 text-red-400 border border-red-500/30",
 };

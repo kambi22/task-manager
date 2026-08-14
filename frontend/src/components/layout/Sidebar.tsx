@@ -7,8 +7,11 @@ import {
   Zap,
   X,
   LogOut,
+  Sun,
+  Moon,
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import { Avatar } from "../ui/Avatar";
 
 const navItems = [
@@ -25,6 +28,7 @@ interface SidebarProps {
 
 export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   const { user, logout } = useAuth();
+  const { isDark, toggleTheme } = useTheme();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -44,7 +48,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
       {/* Mobile Backdrop Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-40 lg:hidden animate-overlay"
+          className="fixed inset-0 bg-slate-950/80 dark:bg-slate-950/80 bg-slate-900/40 backdrop-blur-md z-40 lg:hidden animate-overlay"
           onClick={onClose}
         />
       )}
@@ -59,12 +63,12 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
         `}
       >
         {/* Logo Header */}
-        <div className="flex items-center justify-between px-6 py-6 border-b border-white/10">
+        <div className="flex items-center justify-between px-6 py-6 border-b border-[var(--border-subtle)]">
           <div className="flex items-center gap-3">
             <div className="p-2 rounded-2xl bg-gradient-to-tr from-blue-600 via-indigo-500 to-cyan-400 shadow-lg shadow-blue-500/30 flex items-center justify-center">
               <Zap size={20} className="text-white fill-white/20" />
             </div>
-            <span className="text-xl font-bold text-white tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-300 bg-clip-text text-transparent">
+            <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-[var(--text-primary)] via-[var(--text-primary)] to-[var(--text-secondary)] bg-clip-text text-transparent">
               TaskFlow
             </span>
           </div>
@@ -73,7 +77,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           {onClose && (
             <button
               onClick={onClose}
-              className="lg:hidden p-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-colors"
+              className="lg:hidden p-1.5 rounded-xl bg-[var(--bg-hover)] hover:bg-[var(--bg-hover-strong)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors"
             >
               <X size={18} />
             </button>
@@ -92,8 +96,8 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                 `flex items-center gap-3.5 px-4 py-3 rounded-2xl text-sm font-medium transition-all duration-200 group relative
                 ${
                   isActive
-                    ? "bg-slate-700/40 text-white border border-white/15 shadow-lg shadow-black/20"
-                    : "text-slate-400 hover:bg-white/5 hover:text-slate-100 border border-transparent"
+                    ? "bg-[var(--bg-active)] text-[var(--text-primary)] border border-[var(--border-medium)] shadow-lg dark:shadow-black/20 shadow-black/5"
+                    : "text-[var(--text-muted)] hover:bg-[var(--bg-hover)] hover:text-[var(--text-primary)] border border-transparent"
                 }`
               }
             >
@@ -102,7 +106,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
                   <item.icon
                     size={19}
                     className={`transition-colors ${
-                      isActive ? "text-blue-400" : "text-slate-400 group-hover:text-slate-200"
+                      isActive ? "text-blue-400 dark:text-blue-400" : "text-[var(--text-muted)] group-hover:text-[var(--text-secondary)]"
                     }`}
                   />
                   <span className="tracking-wide">{item.label}</span>
@@ -115,24 +119,35 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           ))}
         </nav>
 
-        {/* User & Logout Footer */}
-        <div className="px-4 py-4 border-t border-white/10 space-y-3">
+        {/* User & Footer */}
+        <div className="px-4 py-4 border-t border-[var(--border-subtle)] space-y-3">
           {user && (
             <div className="flex items-center gap-3 px-2">
               <Avatar name={user.name} size="sm" />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-semibold text-slate-200 truncate">
+                <p className="text-xs font-semibold text-[var(--text-primary)] truncate">
                   {user.name}
                 </p>
-                <p className="text-[10px] text-slate-500 truncate">
+                <p className="text-[10px] text-[var(--text-muted)] truncate">
                   {user.email}
                 </p>
               </div>
             </div>
           )}
+
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-medium text-[var(--text-muted)] hover:text-amber-500 dark:hover:text-amber-400 hover:bg-amber-500/10 transition-all duration-200 cursor-pointer border border-transparent hover:border-amber-500/20"
+          >
+            {isDark ? <Sun size={16} /> : <Moon size={16} />}
+            <span>{isDark ? "Light Mode" : "Dark Mode"}</span>
+          </button>
+
+          {/* Sign Out */}
           <button
             onClick={handleLogout}
-            className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-medium text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-all duration-200 cursor-pointer border border-transparent hover:border-rose-500/20"
+            className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-sm font-medium text-[var(--text-muted)] hover:text-rose-400 hover:bg-rose-500/10 transition-all duration-200 cursor-pointer border border-transparent hover:border-rose-500/20"
           >
             <LogOut size={16} />
             <span>Sign Out</span>

@@ -22,7 +22,7 @@ export function Tooltip({ content, children, disabled = false, className = "" }:
         opacity-0 group-hover:opacity-100 scale-95 group-hover:scale-100
       ">
         <div className="
-          bg-slate-950/95 backdrop-blur-md border border-white/10 text-white text-xs font-semibold
+          bg-[var(--bg-elevated)] backdrop-blur-md border border-[var(--border-subtle)] text-[var(--text-primary)] text-xs font-semibold
           px-3 py-1.5 rounded-xl shadow-xl whitespace-nowrap text-center
           max-w-xs leading-normal tracking-wide
         ">
@@ -30,7 +30,7 @@ export function Tooltip({ content, children, disabled = false, className = "" }:
         </div>
         
         {/* Pointer Arrow */}
-        <div className="w-2.5 h-2.5 bg-slate-950 border-r border-b border-white/10 rotate-45 -mt-1.5 shadow-sm" />
+        <div className="w-2.5 h-2.5 bg-[var(--bg-elevated)] border-r border-b border-[var(--border-subtle)] rotate-45 -mt-1.5 shadow-sm" />
       </div>
     </div>
   );

@@ -52,7 +52,7 @@ export function Modal({
     <div className="fixed inset-0 z-[9999] flex items-center justify-center p-3 sm:p-4 sm:p-6 overflow-y-auto">
       {/* Overlay background covering full screen with blur */}
       <div
-        className="fixed inset-0 bg-slate-950/80 backdrop-blur-md animate-overlay"
+        className="fixed inset-0 bg-[var(--bg-overlay)] backdrop-blur-md animate-overlay"
         onClick={onClose}
       />
 
@@ -60,17 +60,17 @@ export function Modal({
       <div
         className={`
           relative w-full ${sizeClasses[size]} max-h-[90vh] flex flex-col
-          glass-panel rounded-3xl shadow-2xl shadow-black/80
+          glass-panel rounded-3xl shadow-2xl
           animate-slide-up my-auto z-10 overflow-hidden
         `}
       >
         {/* Header */}
         {title && (
-          <div className="flex items-center justify-between px-6 py-5 border-b border-white/10 bg-slate-900/40 flex-shrink-0">
-            <h2 className="text-lg font-bold text-slate-100">{title}</h2>
+          <div className="flex items-center justify-between px-6 py-5 border-b border-[var(--border-subtle)] bg-[var(--bg-card)] flex-shrink-0">
+            <h2 className="text-lg font-bold text-[var(--text-primary)]">{title}</h2>
             <button
               onClick={onClose}
-              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-400 hover:text-slate-100 transition-colors cursor-pointer border border-white/10"
+              className="p-2 rounded-xl bg-[var(--bg-hover)] hover:bg-[var(--bg-hover-strong)] text-[var(--text-muted)] hover:text-[var(--text-primary)] transition-colors cursor-pointer border border-[var(--border-subtle)]"
             >
               <X size={18} />
             </button>
@@ -84,4 +84,3 @@ export function Modal({
     document.body
   );
 }
-

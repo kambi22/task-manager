@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 export default function NotFoundPage() {
   return (
     <div className="flex flex-col items-center justify-center min-h-[70vh] text-center animate-fade-in">
-      <div className="text-8xl font-extrabold text-slate-700 mb-2">404</div>
-      <h1 className="text-xl font-semibold text-slate-300 mb-2">
+      <div className="text-8xl font-extrabold text-[var(--text-dimmed)] mb-2">404</div>
+      <h1 className="text-xl font-semibold text-[var(--text-secondary)] mb-2">
         Page Not Found
       </h1>
-      <p className="text-sm text-slate-500 mb-8 max-w-xs">
+      <p className="text-sm text-[var(--text-muted)] mb-8 max-w-xs">
         The page you're looking for doesn't exist or has been moved.
       </p>
       <Link

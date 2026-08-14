@@ -117,41 +117,41 @@ export default function UsersPage() {
       <div className="relative max-w-md">
         <Search
           size={16}
-          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-500"
+          className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[var(--text-muted)]"
         />
         <input
           type="text"
           placeholder="Search by name, email, or role..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-800/60 border border-slate-700/50 text-sm text-white placeholder-slate-500 outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50"
+          className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-[var(--bg-input)] border border-[var(--border-input)] text-sm text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none transition-all duration-200 focus:ring-2 focus:ring-blue-500/40 focus:border-blue-500/50"
         />
       </div>
 
       {/* Users table */}
-      <div className="glass-panel rounded-2xl overflow-hidden border border-slate-700/30">
+      <div className="glass-panel rounded-2xl overflow-hidden border border-[var(--border-glass)]">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b border-slate-700/50">
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              <tr className="border-b border-[var(--border-subtle)]">
+                <th className="text-left px-6 py-4 text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
                   User
                 </th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <th className="text-left px-6 py-4 text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
                   Email
                 </th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <th className="text-left px-6 py-4 text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
                   Role & Status
                 </th>
-                <th className="text-left px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <th className="text-left px-6 py-4 text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
                   Joined
                 </th>
-                <th className="text-right px-6 py-4 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+                <th className="text-right px-6 py-4 text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-700/30">
+            <tbody className="divide-y divide-[var(--border-glass)]">
               {loading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <tr key={i}>
@@ -180,9 +180,9 @@ export default function UsersPage() {
                   <td colSpan={5} className="px-6 py-16 text-center">
                     <UserCog
                       size={40}
-                      className="mx-auto text-slate-600 mb-3"
+                      className="mx-auto text-[var(--text-dimmed)] mb-3"
                     />
-                    <p className="text-sm text-slate-400">
+                    <p className="text-sm text-[var(--text-muted)]">
                       {searchQuery
                         ? "No users match your search"
                         : "No users registered yet"}
@@ -193,18 +193,18 @@ export default function UsersPage() {
                 filteredUsers.map((user) => (
                   <tr
                     key={user.id}
-                    className="hover:bg-white/[0.02] transition-colors group"
+                    className="hover:bg-[var(--bg-hover)] transition-colors group"
                   >
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <Avatar name={user.name} size="sm" />
-                        <span className="text-sm font-medium text-slate-200">
+                        <span className="text-sm font-medium text-[var(--text-primary)]">
                           {user.name}
                         </span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-1.5 text-slate-400">
+                      <div className="flex items-center gap-1.5 text-[var(--text-muted)]">
                         <Mail size={13} />
                         <span className="text-sm">{user.email}</span>
                       </div>
@@ -215,7 +215,7 @@ export default function UsersPage() {
                           className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wider ${
                             user.role === "ADMIN"
                               ? "bg-indigo-500/15 text-indigo-400 border border-indigo-500/20"
-                              : "bg-slate-500/15 text-slate-400 border border-slate-700/20"
+                              : "bg-slate-500/15 text-[var(--text-muted)] border border-[var(--border-glass)]"
                           }`}
                         >
                           <Shield size={10} />
@@ -230,7 +230,7 @@ export default function UsersPage() {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="flex items-center gap-1.5 text-slate-500">
+                      <div className="flex items-center gap-1.5 text-[var(--text-muted)]">
                         <Calendar size={13} />
                         <span className="text-sm">
                           {formatDate(user.createdAt)}
@@ -286,7 +286,7 @@ export default function UsersPage() {
             placeholder="Email address"
             value={editData.email}
             disabled={true}
-            className="opacity-60 cursor-not-allowed bg-slate-800/30"
+            className="opacity-60 cursor-not-allowed bg-[var(--bg-card)]"
           />
           <Select
             label="Role"
@@ -316,7 +316,7 @@ export default function UsersPage() {
               }))
             }
           />
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-700/50">
+          <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border-input)]">
             <Button
               variant="secondary"
               type="button"

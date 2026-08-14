@@ -202,7 +202,7 @@ export function TaskForm({ isOpen, onClose, onSubmit, task, users, currentUser }
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3 pt-4 border-t border-slate-700/50">
+        <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border-input)]">
           <Button variant="secondary" type="button" onClick={onClose}>
             Cancel
           </Button>

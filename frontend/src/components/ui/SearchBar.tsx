@@ -15,7 +15,7 @@ export function SearchBar({
     <div className="relative flex-1 min-w-[240px]">
       <Search
         size={17}
-        className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+        className="absolute left-4 top-1/2 -translate-y-1/2 text-[var(--text-muted)] pointer-events-none"
       />
       <input
         id="search-bar"
@@ -25,7 +25,7 @@ export function SearchBar({
         placeholder={placeholder}
         className="
           w-full pl-11 pr-4 py-2.5 rounded-2xl
-          glass-input text-slate-100 placeholder-slate-400
+          glass-input text-[var(--text-primary)] placeholder-[var(--text-muted)]
           focus:outline-none transition-all duration-200
           text-sm font-medium shadow-inner
         "
@@ -33,4 +33,3 @@ export function SearchBar({
     </div>
   );
 }
-

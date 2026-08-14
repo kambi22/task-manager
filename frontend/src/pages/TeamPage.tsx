@@ -173,18 +173,18 @@ export default function TeamPage() {
         <div className="glass-panel p-6 rounded-3xl animate-slide-up border border-indigo-500/30">
           <div className="flex items-center justify-between mb-4">
             <div>
-              <h2 className="text-base font-semibold text-white flex items-center gap-2">
+              <h2 className="text-base font-semibold text-[var(--text-primary)] flex items-center gap-2">
                 <Globe className="text-indigo-400" size={18} />
                 External User Integration (JSONPlaceholder API)
               </h2>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-[var(--text-muted)] mt-0.5">
                 Demonstrates REST API fetching with 5s timeout & response transformation
               </p>
             </div>
             <button
               onClick={fetchExternal}
               disabled={loadingExternal}
-              className="p-2 rounded-xl bg-white/5 hover:bg-white/10 text-slate-300 transition-all flex items-center gap-1.5 text-xs cursor-pointer"
+              className="p-2 rounded-xl bg-[var(--bg-hover)] hover:bg-[var(--bg-hover-strong)] text-[var(--text-secondary)] transition-all flex items-center gap-1.5 text-xs cursor-pointer"
             >
               <RefreshCw size={14} className={loadingExternal ? "animate-spin" : ""} />
               Refresh
@@ -194,7 +194,7 @@ export default function TeamPage() {
           {loadingExternal ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 py-4">
               {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="p-4 rounded-2xl bg-slate-900/50 skeleton h-24" />
+                <div key={i} className="p-4 rounded-2xl bg-[var(--bg-card)] skeleton h-24" />
               ))}
             </div>
           ) : externalError ? (
@@ -221,11 +221,11 @@ export default function TeamPage() {
                           External
                         </span>
                       </div>
-                      <h4 className="text-xs font-bold text-slate-200 truncate">{user.name}</h4>
-                      <p className="text-[11px] text-slate-400 truncate flex items-center gap-1 mt-1">
+                      <h4 className="text-xs font-bold text-[var(--text-primary)] truncate">{user.name}</h4>
+                      <p className="text-[11px] text-[var(--text-muted)] truncate flex items-center gap-1 mt-1">
                         <Mail size={10} /> {user.email}
                       </p>
-                      <p className="text-[11px] text-slate-400 truncate flex items-center gap-1 mt-0.5">
+                      <p className="text-[11px] text-[var(--text-muted)] truncate flex items-center gap-1 mt-0.5">
                         <Building2 size={10} /> {user.companyName}
                       </p>
                     </div>
@@ -237,7 +237,7 @@ export default function TeamPage() {
                         w-full mt-3 py-1.5 rounded-xl text-[11px] font-semibold flex items-center justify-center gap-1 transition-all
                         ${
                           isAlreadyTeam
-                            ? "bg-slate-800 text-slate-500 cursor-not-allowed border border-slate-700"
+                            ? "bg-[var(--bg-card)] text-[var(--text-muted)] cursor-not-allowed border border-[var(--border-glass)]"
                             : "bg-indigo-600/80 hover:bg-indigo-500 text-white cursor-pointer border border-indigo-400/30 shadow-sm"
                         }
                       `}
@@ -255,12 +255,12 @@ export default function TeamPage() {
 
       {/* Internal Team grid */}
       <div>
-        <h2 className="text-sm font-semibold text-slate-400 uppercase tracking-wider mb-4 flex items-center gap-2">
+        <h2 className="text-sm font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-4 flex items-center gap-2">
           <Layers size={14} /> Internal Team Directory
         </h2>
         {users.length === 0 ? (
-          <div className="glass-panel p-8 text-center rounded-2xl border border-slate-800">
-            <p className="text-sm text-slate-500">No active team members. Click "Add Member" to build your team!</p>
+          <div className="glass-panel p-8 text-center rounded-2xl border border-[var(--border-glass)]">
+            <p className="text-sm text-[var(--text-muted)]">No active team members. Click "Add Member" to build your team!</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 stagger-children">
@@ -268,7 +268,7 @@ export default function TeamPage() {
               ? Array.from({ length: 8 }).map((_, i) => (
                   <div
                     key={i}
-                    className="bg-slate-800/30 border border-slate-700/30 rounded-2xl p-5"
+                    className="bg-[var(--bg-card)] border border-[var(--border-glass)] rounded-2xl p-5"
                   >
                     <div className="flex flex-col items-center text-center">
                       <div className="skeleton w-14 h-14 rounded-full mb-3" />
@@ -281,14 +281,14 @@ export default function TeamPage() {
               : users.map((user) => (
                   <div
                     key={user.id}
-                    className="bg-slate-800/30 border border-slate-700/30 rounded-2xl p-5 hover:bg-white/[0.02] hover:border-slate-600/40 transition-all duration-200 group"
+                    className="bg-[var(--bg-card)] border border-[var(--border-glass)] rounded-2xl p-5 hover:bg-[var(--bg-hover)] hover:border-[var(--border-medium)] transition-all duration-200 group"
                   >
                     <div className="flex flex-col items-center text-center">
                       <Avatar name={user.name} size="lg" className="mb-3" />
-                      <h3 className="text-sm font-semibold text-slate-200">
+                      <h3 className="text-sm font-semibold text-[var(--text-primary)]">
                         {user.name}
                       </h3>
-                      <div className="flex items-center gap-1.5 mt-1 text-slate-500">
+                      <div className="flex items-center gap-1.5 mt-1 text-[var(--text-muted)]">
                         <Mail size={12} />
                         <span className="text-xs truncate max-w-[180px]">
                           {user.email}
@@ -323,26 +323,26 @@ export default function TeamPage() {
         size="sm"
       >
         <form onSubmit={handleAddMembers} className="space-y-4">
-          <p className="text-xs text-slate-400">
+          <p className="text-xs text-[var(--text-muted)]">
             Select one or more signed up users to add to the internal team.
           </p>
 
           <div className="relative">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--text-muted)]" />
             <input
               type="text"
               placeholder="Search signed up users..."
               value={pickerSearch}
               onChange={(e) => setPickerSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-800/40 border border-slate-700/50 text-xs text-white placeholder-slate-500 outline-none focus:ring-1 focus:ring-blue-500/50"
+              className="w-full pl-9 pr-4 py-2 rounded-xl bg-[var(--bg-input)] border border-[var(--border-input)] text-xs text-[var(--text-primary)] placeholder-[var(--text-muted)] outline-none focus:ring-1 focus:ring-blue-500/50"
             />
           </div>
 
           <div className="max-h-[250px] overflow-y-auto space-y-2 pr-1 custom-scrollbar">
             {loadingNonTeam ? (
-              <div className="text-center py-6 text-xs text-slate-500">Loading registered users...</div>
+              <div className="text-center py-6 text-xs text-[var(--text-muted)]">Loading registered users...</div>
             ) : filteredNonTeam.length === 0 ? (
-              <div className="text-center py-6 text-xs text-slate-500">
+              <div className="text-center py-6 text-xs text-[var(--text-muted)]">
                 {pickerSearch ? "No matching users found" : "All registered users are already in the team"}
               </div>
             ) : (
@@ -353,28 +353,28 @@ export default function TeamPage() {
                     ${
                       selectedUserIds.includes(u.id)
                         ? "bg-blue-600/10 border-blue-500/50 text-white"
-                        : "bg-slate-800/20 border-slate-700/30 hover:border-slate-600/50 text-slate-300"
+                        : "bg-[var(--bg-card)] border-[var(--border-glass)] hover:border-[var(--border-medium)] text-[var(--text-secondary)]"
                     }`}
                 >
                   <div className="flex items-center gap-3">
                     <Avatar name={u.name} size="sm" />
                     <div className="min-w-0">
-                      <p className="text-xs font-semibold truncate text-slate-200">{u.name}</p>
-                      <p className="text-[10px] text-slate-500 truncate">{u.email}</p>
+                      <p className="text-xs font-semibold truncate text-[var(--text-primary)]">{u.name}</p>
+                      <p className="text-[10px] text-[var(--text-muted)] truncate">{u.email}</p>
                     </div>
                   </div>
                   <input
                     type="checkbox"
                     checked={selectedUserIds.includes(u.id)}
                     onChange={() => handleToggleUser(u.id)}
-                    className="w-4 h-4 rounded border-slate-700 bg-slate-800/40 text-blue-600 focus:ring-blue-500 focus:ring-opacity-25"
+                    className="w-4 h-4 rounded border-[var(--border-input)] bg-[var(--bg-input)] text-blue-600 focus:ring-blue-500 focus:ring-opacity-25"
                   />
                 </label>
               ))
             )}
           </div>
 
-          <div className="flex justify-end gap-3 pt-4 border-t border-slate-700/50">
+          <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border-input)]">
             <Button
               variant="secondary"
               type="button"

@@ -50,7 +50,7 @@ export function Avatar({ name, size = "md", className = "" }: AvatarProps) {
         ${sizeClasses[size]} ${bg}
         rounded-full flex items-center justify-center
         text-white font-semibold
-        ring-2 ring-slate-800
+        ring-2 ring-[var(--bg-primary)]
         flex-shrink-0
         ${className}
       `}

@@ -54,20 +54,20 @@ export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
     <div className="fixed inset-0 z-[9999] flex justify-end overflow-hidden">
       {/* Overlay background covering full screen with blur */}
       <div
-        className="fixed inset-0 bg-slate-950/75 backdrop-blur-md animate-overlay"
+        className="fixed inset-0 bg-[var(--bg-overlay)] backdrop-blur-md animate-overlay"
         onClick={onClose}
       />
 
       {/* Slide-over panel */}
-      <div className="relative w-full max-w-xl h-full bg-slate-900 border-l border-slate-700/60 shadow-2xl animate-slide-in-right overflow-y-auto z-10">
+      <div className="relative w-full max-w-xl h-full bg-[var(--bg-elevated)] border-l border-[var(--border-input)] shadow-2xl animate-slide-in-right overflow-y-auto z-10">
         {/* Header */}
-        <div className="sticky top-0 bg-slate-900/95 backdrop-blur-sm border-b border-slate-800/50 px-6 py-4 flex items-center justify-between z-10">
-          <h2 className="text-lg font-semibold text-slate-100">
+        <div className="sticky top-0 bg-[var(--bg-elevated)] backdrop-blur-sm border-b border-[var(--border-glass)] px-6 py-4 flex items-center justify-between z-10">
+          <h2 className="text-lg font-semibold text-[var(--text-primary)]">
             Task Details
           </h2>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg hover:bg-white/5 text-slate-400 hover:text-slate-200 transition-colors cursor-pointer"
+            className="p-1.5 rounded-lg hover:bg-[var(--bg-hover)] text-[var(--text-muted)] hover:text-[var(--text-secondary)] transition-colors cursor-pointer"
           >
             <X size={18} />
           </button>
@@ -86,13 +86,13 @@ export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
               </div>
             </div>
           ) : !task ? (
-            <p className="text-slate-500 text-center py-10">
+            <p className="text-[var(--text-muted)] text-center py-10">
               Task not found.
             </p>
           ) : (
             <>
               {/* Title */}
-              <h1 className="text-xl font-bold text-slate-100 mb-2">
+              <h1 className="text-xl font-bold text-[var(--text-primary)] mb-2">
                 {task.title}
               </h1>
 
@@ -105,10 +105,10 @@ export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
               {/* Description */}
               {task.description && (
                 <div className="mb-6">
-                  <h3 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">
+                  <h3 className="text-xs font-semibold text-[var(--text-muted)] uppercase tracking-wider mb-2">
                     Description
                   </h3>
-                  <p className="text-sm text-slate-400 leading-relaxed bg-slate-800/30 rounded-xl p-4 border border-slate-700/30">
+                  <p className="text-sm text-[var(--text-muted)] leading-relaxed bg-[var(--bg-card)] rounded-xl p-4 border border-[var(--border-glass)]">
                     {task.description}
                   </p>
                 </div>
@@ -116,22 +116,22 @@ export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
 
               {/* Metadata grid */}
               <div className="grid grid-cols-2 gap-4 mb-6">
-                <div className="flex items-center gap-3 bg-slate-800/30 rounded-xl p-3 border border-slate-700/20">
-                  <UserIcon size={16} className="text-slate-500" />
+                <div className="flex items-center gap-3 bg-[var(--bg-card)] rounded-xl p-3 border border-[var(--border-glass)]">
+                  <UserIcon size={16} className="text-[var(--text-muted)]" />
                   <div>
-                    <p className="text-[10px] text-slate-600 uppercase tracking-wider">
+                    <p className="text-[10px] text-[var(--text-dimmed)] uppercase tracking-wider">
                       Assignee
                     </p>
                     <div className="flex items-center gap-2 mt-0.5">
                       {task.user ? (
                         <>
                           <Avatar name={task.user.name} size="sm" />
-                          <span className="text-sm text-slate-300">
+                          <span className="text-sm text-[var(--text-secondary)]">
                             {task.user.name}
                           </span>
                         </>
                       ) : (
-                        <span className="text-sm text-slate-600">
+                        <span className="text-sm text-[var(--text-dimmed)]">
                           Unassigned
                         </span>
                       )}
@@ -139,37 +139,37 @@ export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 bg-slate-800/30 rounded-xl p-3 border border-slate-700/20">
-                  <Calendar size={16} className="text-slate-500" />
+                <div className="flex items-center gap-3 bg-[var(--bg-card)] rounded-xl p-3 border border-[var(--border-glass)]">
+                  <Calendar size={16} className="text-[var(--text-muted)]" />
                   <div>
-                    <p className="text-[10px] text-slate-600 uppercase tracking-wider">
+                    <p className="text-[10px] text-[var(--text-dimmed)] uppercase tracking-wider">
                       Due Date
                     </p>
-                    <p className="text-sm text-slate-300 mt-0.5">
+                    <p className="text-sm text-[var(--text-secondary)] mt-0.5">
                       {formatDate(task.dueDate)}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 bg-slate-800/30 rounded-xl p-3 border border-slate-700/20">
-                  <Clock size={16} className="text-slate-500" />
+                <div className="flex items-center gap-3 bg-[var(--bg-card)] rounded-xl p-3 border border-[var(--border-glass)]">
+                  <Clock size={16} className="text-[var(--text-muted)]" />
                   <div>
-                    <p className="text-[10px] text-slate-600 uppercase tracking-wider">
+                    <p className="text-[10px] text-[var(--text-dimmed)] uppercase tracking-wider">
                       Created
                     </p>
-                    <p className="text-sm text-slate-300 mt-0.5">
+                    <p className="text-sm text-[var(--text-secondary)] mt-0.5">
                       {formatDate(task.createdAt)}
                     </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-3 bg-slate-800/30 rounded-xl p-3 border border-slate-700/20">
-                  <Flag size={16} className="text-slate-500" />
+                <div className="flex items-center gap-3 bg-[var(--bg-card)] rounded-xl p-3 border border-[var(--border-glass)]">
+                  <Flag size={16} className="text-[var(--text-muted)]" />
                   <div>
-                    <p className="text-[10px] text-slate-600 uppercase tracking-wider">
+                    <p className="text-[10px] text-[var(--text-dimmed)] uppercase tracking-wider">
                       Updated
                     </p>
-                    <p className="text-sm text-slate-300 mt-0.5">
+                    <p className="text-sm text-[var(--text-secondary)] mt-0.5">
                       {formatDate(task.updatedAt)}
                     </p>
                   </div>
@@ -177,7 +177,7 @@ export function TaskDetail({ taskId, onClose }: TaskDetailProps) {
               </div>
 
               {/* Divider */}
-              <div className="border-t border-slate-800/50" />
+              <div className="border-t border-[var(--border-glass)]" />
 
               {/* Comments */}
               <CommentSection taskId={task.id} />

@@ -136,7 +136,7 @@ export default function DashboardPage() {
 
       {/* Recent tasks */}
       <div>
-        <h2 className="text-base font-semibold text-slate-300 mb-4">
+        <h2 className="text-base font-semibold text-[var(--text-secondary)] mb-4">
           Recent Tasks
         </h2>
         <TaskTable

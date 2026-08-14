@@ -66,7 +66,7 @@ export function StatsCard({
 // ── Skeleton variant ─────────────────────────────────────────────────
 export function StatsCardSkeleton() {
   return (
-    <div className="rounded-3xl p-6 bg-slate-900/40 border border-white/10 backdrop-blur-xl">
+    <div className="rounded-3xl p-6 bg-[var(--bg-card)] border border-[var(--border-subtle)] backdrop-blur-xl">
       <div className="flex items-center justify-between mb-5">
         <div className="flex items-center gap-2.5">
           <div className="skeleton w-9 h-9 rounded-xl" />
@@ -80,4 +80,3 @@ export function StatsCardSkeleton() {
     </div>
   );
 }
-

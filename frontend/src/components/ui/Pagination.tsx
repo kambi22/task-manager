@@ -31,7 +31,7 @@ export function Pagination({ pagination, onPageChange }: PaginationProps) {
 
   return (
     <div className="flex items-center justify-between mt-4 px-1">
-      <span className="text-sm text-slate-500">
+      <span className="text-sm text-[var(--text-muted)]">
         Page {page} of {totalPages} ({pagination.total} results)
       </span>
 
@@ -39,14 +39,14 @@ export function Pagination({ pagination, onPageChange }: PaginationProps) {
         <button
           onClick={() => onPageChange(page - 1)}
           disabled={!hasPrevPage}
-          className="p-2 rounded-lg hover:bg-white/5 text-slate-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+          className="p-2 rounded-lg hover:bg-[var(--bg-hover)] text-[var(--text-muted)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
         >
           <ChevronLeft size={16} />
         </button>
 
         {pages.map((p, i) =>
           p === "..." ? (
-            <span key={`ellipsis-${i}`} className="px-2 text-slate-500 text-sm">
+            <span key={`ellipsis-${i}`} className="px-2 text-[var(--text-muted)] text-sm">
               ...
             </span>
           ) : (
@@ -58,7 +58,7 @@ export function Pagination({ pagination, onPageChange }: PaginationProps) {
                 ${
                   p === page
                     ? "bg-blue-600 text-white"
-                    : "text-slate-400 hover:bg-white/5"
+                    : "text-[var(--text-muted)] hover:bg-[var(--bg-hover)]"
                 }
               `}
             >
@@ -70,7 +70,7 @@ export function Pagination({ pagination, onPageChange }: PaginationProps) {
         <button
           onClick={() => onPageChange(page + 1)}
           disabled={!hasNextPage}
-          className="p-2 rounded-lg hover:bg-white/5 text-slate-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+          className="p-2 rounded-lg hover:bg-[var(--bg-hover)] text-[var(--text-muted)] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
         >
           <ChevronRight size={16} />
         </button>

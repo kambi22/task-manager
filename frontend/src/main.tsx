@@ -1,38 +1,41 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Toaster } from 'react-hot-toast'
+import { ThemeProvider } from './contexts/ThemeContext'
 import './index.css'
 import App from './App.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <App />
-    <Toaster
-      position="top-right"
-      toastOptions={{
-        duration: 3000,
-        style: {
-          background: "rgba(15, 23, 42, 0.85)",
-          backdropFilter: "blur(16px)",
-          color: "#f8fafc",
-          border: "1px solid rgba(255, 255, 255, 0.12)",
-          borderRadius: "14px",
-          fontSize: "14px",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.5)",
-        },
-        success: {
-          iconTheme: {
-            primary: "#10b981",
-            secondary: "#0f172a",
+    <ThemeProvider>
+      <App />
+      <Toaster
+        position="top-right"
+        toastOptions={{
+          duration: 3000,
+          style: {
+            background: "var(--toast-bg)",
+            backdropFilter: "blur(16px)",
+            color: "var(--toast-text)",
+            border: "1px solid var(--toast-border)",
+            borderRadius: "14px",
+            fontSize: "14px",
+            boxShadow: "var(--toast-shadow)",
           },
-        },
-        error: {
-          iconTheme: {
-            primary: "#ef4444",
-            secondary: "#0f172a",
+          success: {
+            iconTheme: {
+              primary: "#10b981",
+              secondary: "var(--toast-success-secondary)",
+            },
           },
-        },
-      }}
-    />
+          error: {
+            iconTheme: {
+              primary: "#ef4444",
+              secondary: "var(--toast-error-secondary)",
+            },
+          },
+        }}
+      />
+    </ThemeProvider>
   </StrictMode>,
 )
