@@ -16,6 +16,7 @@ TaskFlow is a modern, responsive, and robust task management application designe
 9. [Running the Application](#running-the-application)
 10. [API Documentation](#api-documentation)
 11. [Assumptions Made](#assumptions-made)
+12. [Author / Developer Information](#author--developer-information)
 
 ---
 
@@ -267,3 +268,15 @@ During the implementation of TaskFlow, the following structural decisions and as
 
 4. **Audit and Change logs**:
    * Task history is written automatically using repositories on successful task updates, inserts, and deletes, providing an immutable historical footprint of task progress.
+
+---
+
+## Author / Developer Information
+
+This project was developed by:
+
+* **Name**: Satnam Singh
+* **Email**: [satnamkot8@gmail.com](mailto:satnamkot8@gmail.com)
+* **Phone**: 77400-3662
+* **WhatsApp**: [+91 77400-36662](https://wa.me/917740036662)
+* **Location**: Moga, Punjab, India
