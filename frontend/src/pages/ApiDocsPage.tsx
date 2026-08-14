@@ -3,23 +3,13 @@ import axiosClient from "../api/axiosClient";
 import { PageHeader } from "../components/layout/PageHeader";
 import { useAuth } from "../contexts/AuthContext";
 import {
-  Play,
   Send,
   Lock,
   Unlock,
   Clock,
-  ArrowRight,
-  Sparkles,
   Copy,
   Check,
-  BookOpen,
   Terminal,
-  Activity,
-  Layers,
-  FileText,
-  Plus,
-  Trash2,
-  Edit,
   AlertTriangle,
   FileUp,
 } from "lucide-react";
