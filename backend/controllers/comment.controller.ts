@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { commentService } from "../services/comment.service";
+import { auditLogService } from "../services/audit-log.service";
 import type { CreateCommentInput } from "../schemas/comment.schema";
 
 /**
@@ -42,6 +43,17 @@ export async function createComment(
       userId,
     });
 
+    // Log comment creation
+    await auditLogService.logEvent({
+      userId,
+      action: "COMMENT_ADD",
+      resource: "Comment",
+      resourceId: comment.id,
+      details: { taskId, commentPreview: comment.comment.substring(0, 50) },
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+    });
+
     res.status(201).json({
       success: true,
       data: comment,
@@ -66,6 +78,17 @@ export async function deleteComment(
     const user = (req as any).user;
     await commentService.deleteComment(taskId, id, user);
 
+    // Log comment deletion
+    await auditLogService.logEvent({
+      userId: user.userId,
+      action: "COMMENT_DELETE",
+      resource: "Comment",
+      resourceId: id,
+      details: { taskId, id },
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+    });
+
     res.json({
       success: true,
       message: "Comment deleted successfully",
@@ -74,3 +97,4 @@ export async function deleteComment(
     next(error);
   }
 }
+

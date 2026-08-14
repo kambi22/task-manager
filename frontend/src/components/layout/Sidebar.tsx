@@ -10,6 +10,7 @@ import {
   Sun,
   Moon,
   History,
+  ShieldAlert,
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -21,6 +22,7 @@ const navItems = [
   { path: "/team", icon: Users, label: "Team" },
   { path: "/users", icon: UserCog, label: "Users" },
   { path: "/history", icon: History, label: "History" },
+  { path: "/audit-logs", icon: ShieldAlert, label: "Audit Logs" },
 ];
 
 interface SidebarProps {
@@ -39,11 +41,12 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
   };
 
   const filteredNavItems = navItems.filter((item) => {
-    if (item.path === "/users") {
+    if (item.path === "/users" || item.path === "/audit-logs") {
       return user?.role === "ADMIN";
     }
     return true;
   });
+
 
   return (
     <>

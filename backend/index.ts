@@ -15,6 +15,7 @@ import externalRoutes from "./routes/external.routes";
 import authRoutes from "./routes/auth.routes";
 import taskHistoryRoutes from "./routes/task-history.routes";
 import attachmentRoutes from "./routes/attachment.routes";
+import auditLogRoutes from "./routes/audit-log.routes";
 
 // Middleware imports
 import { errorHandler } from "./middleware/errorHandler";
@@ -64,6 +65,8 @@ app.use("/api", externalRoutes);
 app.use("/api", authRoutes);
 app.use("/api", taskHistoryRoutes);
 app.use("/api", attachmentRoutes);
+app.use("/api", auditLogRoutes);
+
 
 // Global error handler (must be after routes)
 app.use(errorHandler);

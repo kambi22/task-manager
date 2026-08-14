@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { attachmentService } from "../services/attachment.service";
+import { auditLogService } from "../services/audit-log.service";
 import ApiError from "../utils/ApiError";
 
 /**
@@ -21,6 +22,17 @@ export async function uploadAttachment(
     }
 
     const attachment = await attachmentService.uploadAttachment(taskId, file, user);
+
+    // Log attachment upload
+    await auditLogService.logEvent({
+      userId: user.userId,
+      action: "ATTACHMENT_UPLOAD",
+      resource: "Attachment",
+      resourceId: attachment.id,
+      details: { taskId, fileName: attachment.fileName, fileSize: attachment.fileSize, mimeType: attachment.mimeType },
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+    });
 
     res.status(201).json({
       success: true,
@@ -47,6 +59,17 @@ export async function deleteAttachment(
 
     await attachmentService.deleteAttachment(taskId, id, user);
 
+    // Log attachment deletion
+    await auditLogService.logEvent({
+      userId: user.userId,
+      action: "ATTACHMENT_DELETE",
+      resource: "Attachment",
+      resourceId: id,
+      details: { taskId, id },
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+    });
+
     res.json({
       success: true,
       message: "Attachment deleted successfully",
@@ -55,3 +78,4 @@ export async function deleteAttachment(
     next(error);
   }
 }
+

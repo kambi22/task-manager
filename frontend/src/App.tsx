@@ -7,6 +7,7 @@ import TasksPage from "./pages/TasksPage";
 import TeamPage from "./pages/TeamPage";
 import UsersPage from "./pages/UsersPage";
 import TaskHistoryPage from "./pages/TaskHistoryPage";
+import AuditLogsPage from "./pages/AuditLogsPage";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import NotFoundPage from "./pages/NotFoundPage";
@@ -40,6 +41,15 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
+            <Route
+              path="/audit-logs"
+              element={
+                <ProtectedRoute allowedRoles={["ADMIN"]}>
+                  <AuditLogsPage />
+                </ProtectedRoute>
+              }
+            />
+
 
             {/* Placeholder routes for sidebar nav items */}
             <Route

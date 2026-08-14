@@ -42,3 +42,8 @@ export type TaskHistory = Prisma.TaskHistoryModel
  * 
  */
 export type Attachment = Prisma.AttachmentModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel

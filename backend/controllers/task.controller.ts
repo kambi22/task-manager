@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { taskService } from "../services/task.service";
+import { auditLogService } from "../services/audit-log.service";
 import type {
   CreateTaskInput,
   UpdateTaskInput,
@@ -65,6 +66,17 @@ export async function createTask(
     const user = (req as any).user;
     const task = await taskService.createTask(data, user);
 
+    // Log task creation
+    await auditLogService.logEvent({
+      userId: user.userId,
+      action: "TASK_CREATE",
+      resource: "Task",
+      resourceId: task.id,
+      details: { title: task.title, status: task.status, priority: task.priority },
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+    });
+
     res.status(201).json({
       success: true,
       data: task,
@@ -89,6 +101,17 @@ export async function updateTask(
     const user = (req as any).user;
     const task = await taskService.updateTask(id, data, user);
 
+    // Log task update
+    await auditLogService.logEvent({
+      userId: user.userId,
+      action: "TASK_UPDATE",
+      resource: "Task",
+      resourceId: task.id,
+      details: { title: task.title, status: task.status, priority: task.priority, updatedFields: Object.keys(data) },
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+    });
+
     res.json({
       success: true,
       data: task,
@@ -112,6 +135,17 @@ export async function deleteTask(
     const user = (req as any).user;
     await taskService.deleteTask(id, user);
 
+    // Log task deletion
+    await auditLogService.logEvent({
+      userId: user.userId,
+      action: "TASK_DELETE",
+      resource: "Task",
+      resourceId: id,
+      details: { id },
+      ipAddress: req.ip,
+      userAgent: req.headers["user-agent"],
+    });
+
     res.json({
       success: true,
       message: "Task deleted successfully",
@@ -120,3 +154,4 @@ export async function deleteTask(
     next(error);
   }
 }
+

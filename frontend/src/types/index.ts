@@ -155,3 +155,25 @@ export interface TaskQueryParams {
   sortBy?: string;
   sortOrder?: "asc" | "desc";
 }
+
+// ── Audit Log ────────────────────────────────────────────────────────
+export interface AuditLog {
+  id: string;
+  userId: string | null;
+  userName: string;
+  userEmail: string;
+  action: string;
+  resource: string;
+  resourceId: string | null;
+  details: any | null;
+  ipAddress: string | null;
+  userAgent: string | null;
+  createdAt: string;
+  user?: {
+    id: string;
+    name: string;
+    email: string;
+    role: Role;
+  } | null;
+}
+
