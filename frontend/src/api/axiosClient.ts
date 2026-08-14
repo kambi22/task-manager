@@ -1,7 +1,17 @@
 import axios from "axios";
 
+const getBaseURL = () => {
+  if (import.meta.env.VITE_API_URL) {
+    return import.meta.env.VITE_API_URL;
+  }
+  const isProd = import.meta.env.PROD;
+  return isProd
+    ? "https://task-manager-backend-ten-eta.vercel.app/api"
+    : "http://localhost:3000/api";
+};
+
 const axiosClient = axios.create({
-  baseURL: "http://localhost:3000/api",
+  baseURL: getBaseURL(),
   headers: {
     "Content-Type": "application/json",
   },

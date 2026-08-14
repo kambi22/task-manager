@@ -24,9 +24,29 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://task-manager-iqg8.vercel.app",
+];
+
+if (process.env.FRONTEND_URL) {
+  allowedOrigins.push(process.env.FRONTEND_URL);
+}
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps, curl, postman)
+      if (!origin) return callback(null, true);
+      
+      const isLocalhost = origin.startsWith("http://localhost:") || origin.startsWith("http://127.0.0.1:");
+      if (allowedOrigins.includes(origin) || isLocalhost) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
+    },
+    credentials: true,
   })
 );
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));

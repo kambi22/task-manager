@@ -53,7 +53,7 @@ export class UserService {
     }
 
     await userRepository.delete(id);
-    return { message: "User deleted successfully" };
+    return user;
   }
 }
 
