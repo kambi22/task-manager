@@ -4,13 +4,14 @@ interface TooltipProps {
   content: string;
   children: ReactNode;
   disabled?: boolean;
+  className?: string;
 }
 
-export function Tooltip({ content, children, disabled = false }: TooltipProps) {
+export function Tooltip({ content, children, disabled = false, className = "" }: TooltipProps) {
   if (disabled || !content) return <>{children}</>;
 
   return (
-    <div className="relative group inline-block w-full sm:w-auto">
+    <div className={`relative group inline-block w-full ${className}`}>
       {children}
       
       {/* Tooltip Content panel */}

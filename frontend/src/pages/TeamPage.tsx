@@ -151,13 +151,13 @@ export default function TeamPage() {
             </div>
           ) : (
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
-              <Tooltip content="Only admin can access external directories">
+              <Tooltip content="Only admin can access external directories" className="sm:w-auto">
                 <Button variant="secondary" disabled className="w-full sm:w-auto">
                   <Globe size={16} />
                   Explore External Directory (Locked)
                 </Button>
               </Tooltip>
-              <Tooltip content="Only admin can add members to team">
+              <Tooltip content="Only admin can add members to team" className="sm:w-auto">
                 <Button disabled className="w-full sm:w-auto">
                   <CheckSquare size={16} />
                   Add Member (Locked)
