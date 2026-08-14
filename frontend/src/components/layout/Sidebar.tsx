@@ -11,6 +11,7 @@ import {
   Moon,
   History,
   ShieldAlert,
+  BookOpen,
 } from "lucide-react";
 import { useAuth } from "../../contexts/AuthContext";
 import { useTheme } from "../../contexts/ThemeContext";
@@ -23,6 +24,7 @@ const navItems = [
   { path: "/users", icon: UserCog, label: "Users" },
   { path: "/history", icon: History, label: "History" },
   { path: "/audit-logs", icon: ShieldAlert, label: "Audit Logs" },
+  { path: "/api-docs", icon: BookOpen, label: "API Docs" },
 ];
 
 interface SidebarProps {
