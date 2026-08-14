@@ -167,7 +167,7 @@ export default function LoginPage() {
 
         {/* Footer */}
         <p className="text-center text-xs text-[var(--text-dimmed)] mt-6">
-          TaskFlow Pro v1.0 &middot; Secure Authentication
+          TaskFlow &middot; Secure Authentication
         </p>
       </div>
     </div>
